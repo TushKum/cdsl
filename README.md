@@ -2,7 +2,15 @@
 
 A learn-by-doing investing sandbox for first-time investors, built for the CDSL Reimagine Ideathon 2026.
 
-**Run it:** open `index.html` in any browser. It's one file with no backend, no build step and no API keys.
+**Website:** `index.html` is the landing page (Hindi/English) that explains the idea, with real screenshots in `assets/`.
+**Prototype:** `app/index.html` is the app itself. It's one file with no backend, no build step and no API keys; open it in any browser.
+
+### Publish on GitHub Pages
+1. Merge this branch into `main`.
+2. Repo **Settings → Pages → Build and deployment**: Source **Deploy from a branch**, Branch **main**, folder **/ (root)**, Save.
+3. After a minute the site is live at `https://tushkum.github.io/cdsl/`, with the prototype at `/cdsl/app/`.
+
+GitHub Pages needs a public repo on the free plan.
 
 ## What it teaches
 It's not a trading game. Each action explains what happens at the depository layer:

@@ -163,6 +163,21 @@ label.f{display:block;margin:12px 0 4px;font-weight:600;font-size:.92rem}
 .cal li{align-items:center}
 .cert{text-align:center;border:6px double var(--acc);border-radius:16px;padding:18px;background:#fffbef}
 .lsn{display:flex;gap:12px;align-items:center;width:100%;background:#fff;border:0;border-radius:14px;box-shadow:var(--sh);padding:12px;margin:8px 0;text-align:left;min-height:60px}
+.dash-chart{position:relative}
+.dash-chart .tip{position:absolute;top:0;pointer-events:none;background:#1f2328;color:#fff;border-radius:10px;padding:6px 9px;font-size:.78rem;line-height:1.35;white-space:nowrap;transform:translateX(-50%);display:none;z-index:2}
+.legend{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:.8rem;color:var(--mut);margin:4px 0 6px}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend i{display:inline-block;width:16px;height:0;border-top:2px solid}
+.legend i.dash{border-top-style:dashed}
+.abar{margin:10px 0}
+.abar .tr{height:10px;border-radius:5px;background:#efebe4;overflow:hidden}
+.abar .tr i{display:block;height:100%;border-radius:0 4px 4px 0}
+.mini{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.mini .card{margin:0}
+details summary{cursor:pointer;color:var(--pri);font-weight:700;min-height:40px;display:flex;align-items:center}
+.tbl{width:100%;border-collapse:collapse;font-size:.82rem}
+.tbl th,.tbl td{padding:5px 4px;border-bottom:1px solid var(--line);text-align:right}
+.tbl th:first-child,.tbl td:first-child,.tbl th:nth-child(2),.tbl td:nth-child(2){text-align:left}
 .foot{font-size:.75rem;color:var(--mut);text-align:center;margin:20px 0 6px}
 svg{display:block}
 </style>
@@ -236,6 +251,19 @@ en:{
   ms_done:'Step complete: {m} ✓ +50 XP',
 
   tl_cas:'CAS statement', tl_pledge:'Pledge', tl_nom:'Nominee', tl_vote:'E-voting', tl_scam:'Scam Shield', tl_inbox:'Alerts inbox',
+  db_title:'My dashboard', db_sub:'How your money and your learning have grown, day by day.', db_btn:'📊 My dashboard', tl_dash:'Dashboard',
+  db_ret:'Your return', db_mret:'Market return', db_beat:'You are {p} ahead of the market', db_behind:'The market is {p} ahead of you', db_even:'You are level with the market',
+  db_chart:'Your worth vs the market', db_you:'You', db_mkt:'Market', db_cash:'Cash only',
+  db_mkt_h:'Market = ₹1,00,000 spread equally across all 10 companies on day 1 (adjusted for bonus and split). Cash only = ₹1,00,000 kept aside, never invested.',
+  db_one:'Tap “Next day ⏭” to start drawing your chart.', db_table:'Show as table', db_day:'Day', db_date:'Date', db_lakh:'L',
+  db_alloc:'Where your money is', db_alloc_cash:'Cash', db_alloc_sub:'Share of your total worth', db_pend:'incl. {q} pending',
+  db_conc:'{co} is {p} of your shares. Spreading money across companies (diversification) lowers your risk if one company has a bad year.',
+  db_div_ok:'Your shares are spread across {n} companies. That is good diversification!', db_noshares:'All your money is still in cash. Buy a share to see your mix here.',
+  db_income:'Earned from corporate actions', db_divs:'Dividends received', db_free:'Free shares (bonus/split)',
+  db_learn:'Learning progress', db_lessons:'Lessons read', db_steps:'Journey steps', db_scam:'Scam Shield score', db_notyet:'Not played yet',
+  db_safe:'Safety check', db_s_nom:'Nominee added', db_s_cas:'CAS statement checked', db_s_alerts:'All alerts reviewed', db_s_scam:'Scam Shield completed', db_s_pl:'No risky pledge', db_open:'Fix',
+  db_lesson:'Why compare with the market?',
+
 
   ca_div:'{co}: dividend ₹{amt} per share', ca_bonus:'{co}: bonus 1:1 (1 free share for every share)', ca_split:'{co}: stock split, 1 share → {r}',
   ca_rec:'Record date {date}', ca_done:'Done', ca_today:'Today', ca_in:'In {n} day(s)',
@@ -375,6 +403,7 @@ en:{
     nominee:{t:'Nomination', b:['A nominee receives your shares if you pass away. You can add up to 10 nominees with percentage shares.','With a nominee: the transfer needs only a death certificate and a simple form.','Without one: the family needs legal-heir papers or a court succession certificate, which can take months and cost money.','SEBI asks every investor to either add a nominee or formally opt out. Adding one is a gift to your family.']},
     evoting:{t:'Your rights as a shareholder', b:['Owning a share means owning a small part of the company.','You can vote on dividends, directors, mergers and more, at the AGM or online through CDSL e-voting.','One share = one vote. Small votes add up.','You also have the right to receive annual reports and dividends, and to ask questions at the AGM.']},
     scam:{t:'Spotting investment scams', b:['No genuine investment guarantees returns.','Never share your OTP, TPIN or passwords.','Check every advisor on the SEBI website before you pay.','Use only apps from SEBI-registered brokers. Report fraud on cybercrime.gov.in or call 1930.']},
+    bench:{t:'Comparing with the market', b:['A benchmark is a yardstick. Here it is all 10 companies bought in equal amounts and simply held.','If the market went up 5% and you went up 2%, your choices cost you 3%, even though you made money.','Many beginners do better by spreading money widely and holding for long, instead of picking a few shares.','Cash is safe from price falls, but over years inflation slowly shrinks what it can buy.']},
     pnl:{t:'Average price and gain/loss', b:['Average price = total money paid ÷ number of shares.','Gain/loss = (price now − average price) × quantity. It is only “on paper” until you sell.','Prices go up and down every day. Investing for longer smooths out the bumps.']}
   }
 },
@@ -436,6 +465,19 @@ hi:{
   ms_done:'कदम पूरा: {m} ✓ +50 XP',
 
   tl_cas:'CAS स्टेटमेंट', tl_pledge:'गिरवी (प्लेज)', tl_nom:'नॉमिनी', tl_vote:'ई-वोटिंग', tl_scam:'स्कैम शील्ड', tl_inbox:'अलर्ट इनबॉक्स',
+  db_title:'मेरा डैशबोर्ड', db_sub:'दिन-ब-दिन आपका पैसा और आपकी सीख कैसे बढ़ी।', db_btn:'📊 मेरा डैशबोर्ड', tl_dash:'डैशबोर्ड',
+  db_ret:'आपका रिटर्न', db_mret:'बाज़ार का रिटर्न', db_beat:'आप बाज़ार से {p} आगे हैं', db_behind:'बाज़ार आपसे {p} आगे है', db_even:'आप बाज़ार के बराबर हैं',
+  db_chart:'आपकी संपत्ति बनाम बाज़ार', db_you:'आप', db_mkt:'बाज़ार', db_cash:'सिर्फ़ नकद',
+  db_mkt_h:'बाज़ार = पहले दिन ₹1,00,000 सभी 10 कंपनियों में बराबर लगाए गए (बोनस और स्प्लिट के अनुसार समायोजित)। सिर्फ़ नकद = ₹1,00,000 अलग रखे, कभी निवेश नहीं किए।',
+  db_one:'अपना चार्ट बनाना शुरू करने के लिए "अगला दिन ⏭" दबाएँ।', db_table:'तालिका के रूप में देखें', db_day:'दिन', db_date:'तारीख़', db_lakh:' लाख',
+  db_alloc:'आपका पैसा कहाँ है', db_alloc_cash:'नकद', db_alloc_sub:'आपकी कुल संपत्ति में हिस्सा', db_pend:'{q} पेंडिंग सहित',
+  db_conc:'आपके शेयरों का {p} हिस्सा {co} में है। पैसा कई कंपनियों में बाँटने (डाइवर्सिफ़िकेशन) से किसी एक कंपनी का बुरा साल आपको कम नुक़सान पहुँचाता है।',
+  db_div_ok:'आपके शेयर {n} कंपनियों में बँटे हैं। यह अच्छा डाइवर्सिफ़िकेशन है!', db_noshares:'आपका सारा पैसा अभी नकद में है। यहाँ अपना मिश्रण देखने के लिए कोई शेयर खरीदें।',
+  db_income:'कॉर्पोरेट एक्शन से कमाई', db_divs:'मिला डिविडेंड', db_free:'मुफ़्त शेयर (बोनस/स्प्लिट)',
+  db_learn:'सीखने की प्रगति', db_lessons:'पढ़े गए पाठ', db_steps:'यात्रा के कदम', db_scam:'स्कैम शील्ड स्कोर', db_notyet:'अभी नहीं खेला',
+  db_safe:'सुरक्षा जाँच', db_s_nom:'नॉमिनी जोड़ा', db_s_cas:'CAS स्टेटमेंट जाँचा', db_s_alerts:'सारे अलर्ट देखे', db_s_scam:'स्कैम शील्ड पूरा किया', db_s_pl:'कोई जोखिम भरी गिरवी नहीं', db_open:'ठीक करें',
+  db_lesson:'बाज़ार से तुलना क्यों करें?',
+
 
   ca_div:'{co}: ₹{amt} प्रति शेयर डिविडेंड', ca_bonus:'{co}: बोनस 1:1 (हर शेयर पर 1 मुफ़्त शेयर)', ca_split:'{co}: स्टॉक स्प्लिट, 1 शेयर → {r}',
   ca_rec:'रिकॉर्ड डेट {date}', ca_done:'हो गया', ca_today:'आज', ca_in:'{n} दिन बाद',
@@ -575,6 +617,7 @@ hi:{
     nominee:{t:'नॉमिनेशन (नामांकन)', b:['नॉमिनी को आपके न रहने पर आपके शेयर मिलते हैं। आप प्रतिशत हिस्सों के साथ 10 तक नॉमिनी जोड़ सकते हैं।','नॉमिनी होने पर: ट्रांसफ़र के लिए सिर्फ़ मृत्यु प्रमाणपत्र और एक आसान फ़ॉर्म चाहिए।','न होने पर: परिवार को उत्तराधिकारी के काग़ज़ या कोर्ट से सक्सेशन सर्टिफ़िकेट चाहिए, जिसमें महीनों और पैसे लग सकते हैं।','SEBI हर निवेशक से कहता है कि या तो नॉमिनी जोड़ें या औपचारिक रूप से मना करें। नॉमिनी जोड़ना परिवार के लिए तोहफ़ा है।']},
     evoting:{t:'शेयरधारक के रूप में आपके अधिकार', b:['शेयर रखने का मतलब है कंपनी का एक छोटा हिस्सा आपका है।','आप डिविडेंड, निदेशकों, विलय आदि पर AGM में या CDSL ई-वोटिंग से ऑनलाइन वोट दे सकते हैं।','एक शेयर = एक वोट। छोटे-छोटे वोट मिलकर फ़र्क़ डालते हैं।','आपको वार्षिक रिपोर्ट और डिविडेंड पाने तथा AGM में सवाल पूछने का भी अधिकार है।']},
     scam:{t:'निवेश धोखाधड़ी कैसे पहचानें', b:['कोई भी असली निवेश रिटर्न की गारंटी नहीं देता।','अपना OTP, TPIN या पासवर्ड कभी साझा न करें।','पैसा देने से पहले हर सलाहकार को SEBI वेबसाइट पर जाँचें।','सिर्फ़ SEBI-रजिस्टर्ड ब्रोकरों के ऐप इस्तेमाल करें। धोखाधड़ी की शिकायत cybercrime.gov.in पर करें या 1930 पर कॉल करें।']},
+    bench:{t:'बाज़ार से तुलना', b:['बेंचमार्क एक पैमाना है। यहाँ यह सभी 10 कंपनियों को बराबर रकम में ख़रीदकर रखे रहना है।','अगर बाज़ार 5% बढ़ा और आप 2%, तो आपके फ़ैसलों से 3% कम मिला, भले ही आपको मुनाफ़ा हुआ।','कई नए निवेशकों के लिए पैसा कई जगह बाँटकर लंबे समय तक रखना, कुछ शेयर चुनने से बेहतर रहता है।','नकद भाव गिरने से सुरक्षित है, पर सालों में महँगाई उसकी ख़रीद-शक्ति धीरे-धीरे घटा देती है।']},
     pnl:{t:'औसत कीमत और लाभ/हानि', b:['औसत कीमत = कुल चुकाया पैसा ÷ शेयरों की संख्या।','लाभ/हानि = (अभी का भाव − औसत कीमत) × मात्रा। बेचने तक यह सिर्फ़ "काग़ज़ पर" है।','भाव रोज़ ऊपर-नीचे होते हैं। लंबे समय तक निवेश करने से उतार-चढ़ाव का असर कम होता है।']}
   }
 }};
@@ -603,12 +646,12 @@ const CA = [
 const BROKERS = [{id:'b1',dp:'12081600',e:'🌿'},{id:'b2',dp:'12033200',e:'🏡'},{id:'b3',dp:'12010900',e:'🌸'}];
 const MS = ['onboard','buy','settle','sell','cas','corp','pledge','nominee','vote','scam'];
 const MS_GO = {onboard:'profile',buy:'market',settle:'portfolio',sell:'portfolio',cas:'cas',corp:'market',pledge:'pledge',nominee:'nominee',vote:'vote',scam:'scam'};
-const LESSON_ORDER = ['accounts','kyc','boid','order','settlement','alerts','tpin','pnl','cas','dividend','bonus','split','pledge','nominee','evoting','scam'];
-const LESSON_ICON = {kyc:'🪪',accounts:'🏦',boid:'🔢',order:'🛒',settlement:'⏱️',alerts:'📲',tpin:'🔑',cas:'📄',dividend:'💰',bonus:'🎁',split:'✂️',pledge:'🔒',nominee:'👨‍👩‍👧',evoting:'🗳️',scam:'🛡️',pnl:'📈'};
+const LESSON_ORDER = ['accounts','kyc','boid','order','settlement','alerts','tpin','pnl','bench','cas','dividend','bonus','split','pledge','nominee','evoting','scam'];
+const LESSON_ICON = {kyc:'🪪',accounts:'🏦',boid:'🔢',order:'🛒',settlement:'⏱️',alerts:'📲',tpin:'🔑',cas:'📄',dividend:'💰',bonus:'🎁',split:'✂️',pledge:'🔒',nominee:'👨‍👩‍👧',evoting:'🗳️',scam:'🛡️',pnl:'📈',bench:'📏'};
 
 function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};}
 function gauss(r){let u=0;while(u===0)u=r();const v=r();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v);}
-const PX = {};
+const PX = {}, RAW = {}; // RAW = total-return style series (no bonus/split/dividend drop), used for the market benchmark
 (function(){
   const r = mulberry32(20260601);
   STOCKS.forEach(st=>{
@@ -616,6 +659,7 @@ const PX = {};
     for(let i=0;i<N;i++){ if(i>0) p = p*Math.exp(st.dr + st.v*gauss(r)); a.push(p); }
     PX[st.s] = a;
   });
+  Object.keys(PX).forEach(k=>{ RAW[k] = PX[k].slice(); });
   CA.forEach(c=>{
     const a = PX[c.sym];
     for(let i=c.day+HIST;i<N;i++){ if(c.type==='div') a[i]-=c.amt; else a[i]/=c.f; }
@@ -920,6 +964,7 @@ function vHome(){
       <small>${t('h_net')}</small><div class="big">${fm(nw)}</div>
       <div class="kv"><div><small>${t('h_cash')}</small><b>${fm(S.cash)}</b></div><div><small>${t('h_inv')}</small><b>${fm(holdVal()+S.pend.filter(p=>p.side==='B').reduce((a,p)=>a+p.q*price(p.sym),0))}</b></div>
       <div><small>${t('h_pnl')}</small><b class="${cls(pnl)}">${sgn(pnl)} (${pct(pnl/START_CASH*100)})</b></div></div>
+      <button class="btn sec block" style="margin-top:12px" data-a="go" data-x="dash">${t('db_btn')}</button>
     </div>
     ${pendN?`<div class="note">⏳ ${t('h_pend',{n:pendN})}</div>`:(S.day===0?`<div class="note">💡 ${t('h_hint')}</div>`:'')}
     ${!S.nominee?`<div class="card" style="border:2px solid var(--rose)"><h3>👨‍👩‍👧 ${t('h_nom_t')}</h3><p class="mut">${S.nomSkip?t('h_nom_s'):t('h_nom_b')}</p><button class="btn rose" data-a="go" data-x="nominee">${t('h_nom_btn')}</button></div>`:''}
@@ -1000,6 +1045,7 @@ function vPortfolio(){
       <div><small>${t('pf_pnl')}</small><b class="${cls(pnl)}">${sgn(pnl)}${inv?` (${pct(pnl/inv*100)})`:''}</b></div><div><small>${t('h_cash')}</small><b>${fm(S.cash)}</b></div></div>
       <button class="link" data-a="lesson" data-x="pnl">${t('pf_why')}</button>
     </div>
+    <button class="btn sec block" data-a="go" data-x="dash">${t('db_btn')}</button>
     <div class="btns"><button class="btn sec" data-a="go" data-x="cas">${t('pf_cas')}</button><button class="btn sec" data-a="go" data-x="pledge">${t('pf_pledge')}</button></div>
     ${S.pend.length?`<h2>⏳ ${t('pf_pend')}</h2><div class="card flat"><ul class="list">${S.pend.map(p=>`<li><span>${p.side==='B'?t('pf_pend_b',{q:p.q,co:nm(p.sym),date:fdate(p.d+1)}):t('pf_pend_s',{q:p.q,co:nm(p.sym),amt:fm(p.q*p.px),date:fdate(p.d+1)})}</span><span class="chip">T+1</span></li>`).join('')}</ul></div>`:''}
     <h2>${t('pf_hold')}</h2>
@@ -1153,6 +1199,162 @@ function vScam(){
   </div>`;
 }
 
+
+/* ---------------- Learner dashboard ---------------- */
+const C_YOU = '#0d9488', C_MKT = '#d97706', C_CASH = '#9a948a';
+const CH = {w:328, h:190, pl:58, pr:70, pt:10, pb:22};
+// Rebuilds total worth for every simulated day by replaying the activity log
+function worthSeries(){
+  const out = [], q = {}, pb = {}; let cash = START_CASH, ps = 0, j = 0;
+  for(let d=0; d<=S.day; d++){
+    while(j<S.tx.length && S.tx[j].d<=d){
+      const x = S.tx[j++];
+      if(x.k==='BUY'){ cash -= x.amt; pb[x.sym] = (pb[x.sym]||0)+x.q; }
+      else if(x.k==='CR') pb[x.sym] -= x.q;
+      else if(x.k==='SELL') ps += x.amt;
+      else if(x.k==='PAYIN'){ ps -= x.amt; cash += x.amt; }
+      else if(x.k==='DIV') cash += x.amt;
+      if(x.dq) q[x.sym] = (q[x.sym]||0)+x.dq;
+    }
+    let v = cash+ps;
+    for(const k in q) v += q[k]*price(k,d);
+    for(const k in pb) v += pb[k]*price(k,d);
+    out.push(Math.round(v*100)/100);
+  }
+  return out;
+}
+function marketSeries(){
+  const out = [];
+  for(let d=0; d<=S.day; d++){
+    let r = 0; STOCKS.forEach(s=>{ r += RAW[s.s][d+HIST]/RAW[s.s][HIST]; });
+    out.push(Math.round(START_CASH*r/STOCKS.length*100)/100);
+  }
+  return out;
+}
+function fL(v){ return '₹'+(v/100000).toFixed(2)+t('db_lakh'); }
+function worthChart(you, mkt){
+  const {w, h, pl, pr, pt, pb} = CH, n = you.length;
+  const all = you.concat(mkt, [START_CASH]);
+  let mn = Math.min.apply(null,all), mx = Math.max.apply(null,all);
+  const pad = Math.max((mx-mn)*0.12, 500); mn -= pad; mx += pad;
+  const x = i=>pl + (n>1 ? i/(n-1) : 0.5)*(w-pl-pr), y = v=>pt + (1-(v-mn)/(mx-mn))*(h-pt-pb);
+  const line = arr=>arr.map((v,i)=>x(i).toFixed(1)+','+y(v).toFixed(1)).join(' ');
+  const ticks = [mn+(mx-mn)*0.15, (mn+mx)/2, mx-(mx-mn)*0.15];
+  // end labels: nudge apart so they never collide
+  const ends = [{l:t('db_you'),v:you[n-1],c:C_YOU},{l:t('db_mkt'),v:mkt[n-1],c:C_MKT},{l:t('db_cash'),v:START_CASH,c:C_CASH}]
+    .map(e=>Object.assign(e,{y:y(e.v)})).sort((a,b)=>a.y-b.y);
+  for(let i=1;i<ends.length;i++) if(ends[i].y-ends[i-1].y<13) ends[i].y = ends[i-1].y+13;
+  return `<svg viewBox="0 0 ${w} ${h}" width="100%" role="img" aria-label="${t('db_chart')}">
+    ${ticks.map(v=>`<line x1="${pl}" x2="${w-pr}" y1="${y(v).toFixed(1)}" y2="${y(v).toFixed(1)}" stroke="#e7e1d6" stroke-width="1"/><text x="${pl-6}" y="${(y(v)+4).toFixed(1)}" font-size="10" fill="#5f6670" text-anchor="end">${fL(v)}</text>`).join('')}
+    <line x1="${pl}" x2="${w-pr}" y1="${y(START_CASH).toFixed(1)}" y2="${y(START_CASH).toFixed(1)}" stroke="${C_CASH}" stroke-width="2" stroke-dasharray="5 4"/>
+    <polyline fill="none" stroke="${C_MKT}" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" points="${line(mkt)}"/>
+    <polyline fill="none" stroke="${C_YOU}" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" points="${line(you)}"/>
+    <circle cx="${x(n-1).toFixed(1)}" cy="${y(mkt[n-1]).toFixed(1)}" r="4" fill="${C_MKT}" stroke="#fff" stroke-width="2"/>
+    <circle cx="${x(n-1).toFixed(1)}" cy="${y(you[n-1]).toFixed(1)}" r="4.5" fill="${C_YOU}" stroke="#fff" stroke-width="2"/>
+    ${ends.map(e=>`<text x="${w-pr+6}" y="${(e.y+4).toFixed(1)}" font-size="11" font-weight="700" fill="#1f2328">${esc(e.l)}</text>`).join('')}
+    <text x="${pl}" y="${h-5}" font-size="10" fill="#5f6670">${fdate(0)}</text>
+    <text x="${w-pr}" y="${h-5}" font-size="10" fill="#5f6670" text-anchor="end">${fdate(S.day)}</text>
+    <line id="dx" x1="0" x2="0" y1="${pt}" y2="${h-pb}" stroke="#5f6670" stroke-width="1" opacity="0"/>
+    <circle id="dy1" r="5" fill="${C_YOU}" stroke="#fff" stroke-width="2" opacity="0"/>
+    <circle id="dy2" r="5" fill="${C_MKT}" stroke="#fff" stroke-width="2" opacity="0"/>
+    <rect id="dhit" x="${pl-8}" y="0" width="${w-pl-pr+16}" height="${h}" fill="transparent" style="touch-action:pan-y"/>
+  </svg>`;
+}
+let DASH = null;
+function vDash(){
+  const you = worthSeries(), mkt = marketSeries(), n = you.length;
+  DASH = {you, mkt};
+  const nw = you[n-1], r = (nw/START_CASH-1)*100, mr = (mkt[n-1]/START_CASH-1)*100, gap = r-mr;
+  const cmp = Math.abs(gap)<0.05 ? t('db_even') : gap>0 ? t('db_beat',{p:Math.abs(gap).toFixed(2)+'%'}) : t('db_behind',{p:Math.abs(gap).toFixed(2)+'%'});
+  // allocation (settled + pending buys, valued today)
+  const val = {};
+  for(const k in S.hold) val[k] = (val[k]||0) + S.hold[k].q*price(k);
+  S.pend.forEach(p=>{ if(p.side==='B') val[p.sym] = (val[p.sym]||0) + p.q*price(p.sym); });
+  const total = netWorth(), shares = Object.keys(val).reduce((a,k)=>a+val[k],0);
+  const rows = Object.keys(val).filter(k=>val[k]>0).sort((a,b)=>val[b]-val[a]);
+  const cashNow = total - shares;
+  const top = rows[0], topP = shares ? val[top]/shares*100 : 0;
+  const divs = S.tx.filter(x=>x.k==='DIV').reduce((a,x)=>a+x.amt,0);
+  const free = S.tx.filter(x=>x.k==='BONUS'||x.k==='SPLIT').reduce((a,x)=>a+x.q,0);
+  const lessons = LESSON_ORDER.filter(k=>S.learned[k]).length, steps = MS.filter(k=>S.ms[k]).length;
+  const SC = tr('SC'), scamRight = S.scamDone ? S.scam.ans.filter((a,i)=>a===SC[i].a).length : null;
+  const plDrop = S.plBase>0 ? Math.round((1-margin()/S.plBase)*100) : 0;
+  const safe = [
+    ['db_s_nom', !!S.nominee, 'nominee'],
+    ['db_s_cas', !!S.ms.cas, 'cas'],
+    ['db_s_alerts', S.sms.length===S.smsRead, 'inbox'],
+    ['db_s_scam', S.scamDone, 'scam'],
+    ['db_s_pl', plDrop<5, 'pledge']
+  ];
+  const abar = (label, v, color, sub)=>{ const p = total ? v/total*100 : 0;
+    return `<div class="abar"><div class="between"><span><b>${label}</b>${sub?` <small>${sub}</small>`:''}</span><span><b>${fm0(v)}</b> <small>${p.toFixed(1)}%</small></span></div>
+      <div class="tr" title="${esc(label)}: ${fm0(v)} (${p.toFixed(1)}%)"><i style="width:${Math.max(p,0.5)}%;background:${color}"></i></div></div>`; };
+  return `<div class="wrap"><button class="link" data-a="back">${t('back')}</button>
+    <h1>📊 ${t('db_title')}</h1><p class="mut">${t('db_sub')}</p>
+    <div class="card">
+      <small>${t('h_net')}</small><div class="big">${fm(nw)}</div>
+      <div class="kv"><div><small>${t('db_ret')}</small><b class="${cls(r)}">${pct(r)}</b></div><div><small>${t('db_mret')}</small><b class="${cls(mr)}">${pct(mr)}</b></div></div>
+      <p style="margin-top:8px"><b>${gap>=0?'🏆':'📏'} ${cmp}</b></p>
+    </div>
+    <div class="card">
+      <h3>${t('db_chart')}</h3>
+      <div class="legend"><span><i style="border-color:${C_YOU}"></i>${t('db_you')}</span><span><i style="border-color:${C_MKT}"></i>${t('db_mkt')}</span><span><i class="dash" style="border-color:${C_CASH}"></i>${t('db_cash')}</span></div>
+      <div class="dash-chart" id="dchart">${worthChart(you, mkt)}<div class="tip" id="dtip"></div></div>
+      ${n<2?`<p class="note">💡 ${t('db_one')}</p>`:''}
+      <p class="hint">${t('db_mkt_h')}</p>
+      <details><summary>${t('db_table')}</summary>
+        <table class="tbl"><thead><tr><th>${t('db_day')}</th><th>${t('db_date')}</th><th>${t('db_you')}</th><th>${t('db_mkt')}</th></tr></thead>
+        <tbody>${you.map((v,i)=>({v,i})).reverse().map(o=>`<tr><td>${o.i+1}</td><td>${fdate(o.i)}</td><td>${fm0(o.v)}</td><td>${fm0(mkt[o.i])}</td></tr>`).join('')}</tbody></table>
+      </details>
+      <button class="link" data-a="lesson" data-x="bench">${t('db_lesson')} →</button>
+    </div>
+    <div class="card">
+      <h3>${t('db_alloc')}</h3><small class="mut">${t('db_alloc_sub')}</small>
+      ${rows.map(k=>{ const pq = pendQ(k); return abar(SMAP[k].e+' '+nm(k), val[k], C_YOU, pq?t('db_pend',{q:pq}):''); }).join('')}
+      ${abar('💵 '+t('db_alloc_cash'), cashNow, C_CASH)}
+      ${!rows.length ? sakhi(t('db_noshares')) : topP>40 && rows.length ? sakhi(t('db_conc',{co:nm(top),p:topP.toFixed(0)+'%'}),'bench') : sakhi(t('db_div_ok',{n:rows.length}))}
+    </div>
+    <div class="mini">
+      <div class="card"><small>${t('db_divs')}</small><div class="big" style="font-size:1.25rem">${fm(divs)}</div></div>
+      <div class="card"><small>${t('db_free')}</small><div class="big" style="font-size:1.25rem">+${num(free,0)}</div></div>
+    </div>
+    <div class="card">
+      <h3>${t('db_learn')}</h3>
+      <div class="between"><small>${t('db_lessons')}</small><b>${lessons} / ${LESSON_ORDER.length}</b></div><div class="prog"><i style="width:${lessons/LESSON_ORDER.length*100}%"></i></div>
+      <div class="between"><small>${t('db_steps')}</small><b>${steps} / ${MS.length}</b></div><div class="prog"><i style="width:${steps/MS.length*100}%"></i></div>
+      <div class="between"><small>${t('db_scam')}</small><b>${scamRight==null?t('db_notyet'):scamRight+' / '+SC.length}</b></div>
+      <div class="between" style="margin-top:6px"><small>${t('pr_level')}</small><span class="chip t">${t(level())} · ${S.xp} XP</span></div>
+    </div>
+    <div class="card">
+      <h3>🛡️ ${t('db_safe')} <small class="mut">${safe.filter(s=>s[1]).length} / ${safe.length}</small></h3>
+      <ul class="jl">${safe.map(([k,ok,go])=>`<li><button data-a="go" data-x="${go}"><span class="tick ${ok?'on':''}">${ok?'✓':'!'}</span><span class="grow">${t(k)}</span>${ok?'':`<span class="chip r">${t('db_open')}</span>`}</button></li>`).join('')}</ul>
+    </div>
+  </div>`;
+}
+function bindDash(){
+  const hit = document.getElementById('dhit'), tip = document.getElementById('dtip'), box = document.getElementById('dchart');
+  if(!hit || !DASH) return;
+  const svg = hit.ownerSVGElement, n = DASH.you.length;
+  const show = ev=>{
+    const r = svg.getBoundingClientRect(), sx = CH.w/r.width, {pl, pr} = CH;
+    const px = (ev.clientX - r.left)*sx;
+    const i = n>1 ? Math.max(0,Math.min(n-1,Math.round((px-pl)/(CH.w-pl-pr)*(n-1)))) : 0;
+    const all = DASH.you.concat(DASH.mkt,[START_CASH]);
+    let mn = Math.min.apply(null,all), mx = Math.max.apply(null,all); const pad = Math.max((mx-mn)*0.12,500); mn -= pad; mx += pad;
+    const X = pl + (n>1 ? i/(n-1) : 0.5)*(CH.w-pl-pr), Y = v=>CH.pt + (1-(v-mn)/(mx-mn))*(CH.h-CH.pt-CH.pb);
+    const dx = document.getElementById('dx'), d1 = document.getElementById('dy1'), d2 = document.getElementById('dy2');
+    dx.setAttribute('x1',X); dx.setAttribute('x2',X); dx.setAttribute('opacity','.6');
+    d1.setAttribute('cx',X); d1.setAttribute('cy',Y(DASH.you[i])); d1.setAttribute('opacity','1');
+    d2.setAttribute('cx',X); d2.setAttribute('cy',Y(DASH.mkt[i])); d2.setAttribute('opacity','1');
+    tip.innerHTML = `<b>${fdate(i,{weekday:'short',day:'numeric',month:'short'})}</b><br><span style="color:#5eead4">●</span> ${t('db_you')}: ${fm0(DASH.you[i])}<br><span style="color:#fbbf24">●</span> ${t('db_mkt')}: ${fm0(DASH.mkt[i])}`;
+    tip.style.display = 'block';
+    const left = Math.max(70, Math.min(box.clientWidth-70, X/sx));
+    tip.style.left = left+'px';
+  };
+  const hide = ()=>{ tip.style.display = 'none'; ['dx','dy1','dy2'].forEach(id=>document.getElementById(id).setAttribute('opacity','0')); };
+  hit.addEventListener('pointermove', show); hit.addEventListener('pointerdown', show); hit.addEventListener('pointerleave', hide);
+}
+
 function vInbox(){
   return `<div class="wrap"><button class="link" data-a="back">${t('back')}</button>
     <h1>📲 ${t('ib_title')}</h1><p class="mut">${t('ib_sub')}</p>
@@ -1296,9 +1498,10 @@ function render(){
     const v = ui.view || ui.tab;
     if(v==='inbox') S.smsRead = S.sms.length;
     body = ({home:vHome, market:vMarket, stock:vStock, portfolio:vPortfolio, learn:vLearn, profile:vProfile,
-             cas:vCas, pledge:vPledge, nominee:vNominee, vote:vVote, scam:vScam, inbox:vInbox}[v] || vHome)();
+             cas:vCas, pledge:vPledge, nominee:vNominee, vote:vVote, scam:vScam, inbox:vInbox, dash:vDash}[v] || vHome)();
   }
   app.innerHTML = header() + `<main>${body}</main>` + (S.onb>=4?nav():'');
+  if(S.onb>=4 && ui.view==='dash') bindDash();
   renderModal();
 }
 function renderModal(){

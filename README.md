@@ -9,6 +9,7 @@ A learn-by-doing investing sandbox for first-time investors, built for the CDSL 
 | `mentor/` | Facilitator portal: groups, join codes and per-learner progress (needs the server) |
 | `insights/` | Public, anonymous learning statistics (needs the server) |
 | `server/` | Node.js + SQLite backend: accounts, sync, depository ledger tables, groups, analytics |
+| `tools/build_hosted.py` | Builds the claude.ai-hosted copy (app as the main page, built-in database) into `dist/hosted/` |
 | `pitch/` | Pitch deck for the judges (PowerPoint, 13 slides with speaker notes) |
 
 The app never needs the server. When it is opened from a running server, **Profile → Cloud backup** appears and learners can back up, restore on another phone and join a facilitator's group.
@@ -41,6 +42,29 @@ It's not a trading game. Each action explains what happens at the depository lay
 * State is saved to `localStorage` (wrapped in try/catch). Use Profile → Reset demo to start over.
 
 All names, numbers, messages and prices are simulated. No real account is opened.
+
+## Hosted on claude.ai (built-in database)
+The claude.ai-hosted copy needs no server. `python3 tools/build_hosted.py` writes `dist/hosted/`:
+- the **app** as the page the link opens
+- the landing page at `about/`
+- the screenshots
+
+When that page runs inside claude.ai, the app uses the page's own database instead of the Node server:
+- **Backup:** each signed-in viewer's progress saves automatically to their private `data/users/<id>/` space, so it follows them to any device. There is no PIN.
+- **Facilitators:** a summary (name, day, worth, steps, lessons, scam answers, nominee yes/no; never PAN, Aadhaar, mobile or trades) goes to `members/<id>`, readable only by people with **edit access** to the page. They use the in-app **Facilitator view** (`#mentor`) to create groups and follow learners.
+- **Insights:** the same summary without the name goes to `anon/<id>`, which every viewer reads for the in-app **Insights** page (`#insights`).
+
+Access rules declared at publish:
+
+| Path | Read | Write |
+|---|---|---|
+| `groups` | view | admin |
+| `members` | admin | admin |
+| `members/{self}` | interact | interact |
+| `anon` | view | admin |
+| `anon/{self}` | (view) | interact |
+
+Pages using claude.ai's database can only be opened by signed-in members of the owner's organization. The writes come from the browser, so the server-side trade checks below do not apply there.
 
 ## Backend (`server/`)
 

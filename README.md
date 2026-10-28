@@ -10,7 +10,7 @@ A learn-by-doing investing sandbox for first-time investors, built for the CDSL 
 | `insights/` | Public, anonymous learning statistics (needs the server) |
 | `server/` | Node.js + SQLite backend: accounts, sync, depository ledger tables, groups, analytics |
 | `tools/build_hosted.py` | Builds the claude.ai-hosted copy (app as the main page, built-in database) into `dist/hosted/` |
-| `pitch/` | Pitch deck for the judges (PowerPoint, 13 slides with speaker notes) |
+| `pitch/` | Pitch deck for the judges (PowerPoint, 14 slides with speaker notes) |
 
 The app never needs the server. When it is opened from a running server, **Profile → Cloud backup** appears and learners can back up, restore on another phone and join a facilitator's group.
 

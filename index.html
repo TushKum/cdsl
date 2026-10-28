@@ -171,6 +171,9 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .try .ctas{margin-top:28px;display:flex;flex-wrap:wrap;gap:12px;align-items:center}
 .try .ctas small{color:var(--muted)}
 
+.browser{display:block;margin-top:24px;border-radius:14px;overflow:hidden;border:1px solid var(--line);box-shadow:var(--shadow);background:var(--surface);text-decoration:none}
+.browser .dots{display:flex;gap:6px;padding:10px 12px;border-bottom:1px solid var(--line)}
+.browser .dots i{width:10px;height:10px;border-radius:50%;background:var(--line)}
 footer{padding-block:36px 48px;color:var(--muted);font-size:.9rem;border-top:1px solid var(--line)}
 footer .wrap{display:flex;flex-wrap:wrap;gap:12px 28px;justify-content:space-between}
 footer p{max-width:70ch}
@@ -293,6 +296,16 @@ footer p{max-width:70ch}
   </div>
 </section>
 
+<section id="dashboard" style="padding-top:24px">
+  <div class="wrap">
+    <div class="eyebrow" data-i="dw_e">Learner dashboard</div>
+    <h2 data-i="dw_h">Everything a learner did, on one page</h2>
+    <p class="lede" style="margin-top:12px" data-i="dw_p">Worth against the market and against cash, daily gains and losses, holdings, every depository event with its T or T+1 tag, corporate-action income, alerts, learning progress and a safety check. It updates live while the app is open in another tab.</p>
+    <a class="browser" href="app/index.html#dashboard"><span class="dots"><i></i><i></i><i></i></span><img src="assets/s-dashboard-wide.jpg" width="1920" height="1200" loading="lazy" alt="Full-page learner dashboard with worth chart, allocation, holdings and activity" data-alt="alt8"></a>
+    <p style="margin-top:14px"><a class="btn line" style="color:var(--teal-ink)" href="app/index.html#dashboard" data-i="cta5">Open the dashboard →</a> <small class="mut" style="color:var(--muted)" data-i="dw_s">Before you start, it shows an example learner.</small></p>
+  </div>
+</section>
+
 <section id="who" style="padding-top:24px">
   <div class="wrap who">
     <div>
@@ -320,10 +333,11 @@ footer p{max-width:70ch}
     <ol class="steps">
       <li><h3 data-i="s1h">Open your account</h3><p data-i="s1">Tap “Fill demo details”, choose any broker, and note your BO ID and TPIN.</p></li>
       <li><h3 data-i="s2h">Buy ITC on day 1</h3><p data-i="s2">Then tap “Next day ⏭” a few times. Watch the CDSL alert arrive, then the dividend on Fri 5 Jun.</p></li>
-      <li><h3 data-i="s3h">Check what you own</h3><p data-i="s3">Open the CAS statement and your dashboard. Then try Scam Shield.</p></li>
+      <li><h3 data-i="s3h">Check what you own</h3><p data-i="s3">Open the CAS statement and the full dashboard. Then try Scam Shield.</p></li>
     </ol>
     <div class="ctas">
       <a class="btn go" href="app/index.html" data-i="cta3">Open the prototype →</a>
+      <a class="btn line" href="app/index.html#dashboard" data-i="cta4">View the dashboard</a>
       <small data-i="reset">Progress saves in your browser. Profile → Reset demo starts over.</small>
     </div>
   </div>
@@ -380,8 +394,9 @@ footer p{max-width:70ch}
     t_e:'जजों के लिए', t_h:'लगभग तीन मिनट में पूरा आइडिया देखें',
     s1h:'अकाउंट खोलें', s1:'"डेमो जानकारी भरें" दबाएँ, कोई भी ब्रोकर चुनें, और अपनी BO ID व TPIN नोट करें।',
     s2h:'पहले दिन ITC खरीदें', s2:'फिर कुछ बार "अगला दिन ⏭" दबाएँ। CDSL अलर्ट आते देखें, फिर शुक्र 5 जून को डिविडेंड।',
-    s3h:'जाँचें आपके पास क्या है', s3:'CAS स्टेटमेंट और अपना डैशबोर्ड खोलें। फिर स्कैम शील्ड आज़माएँ।',
-    cta3:'प्रोटोटाइप खोलें →', reset:'प्रगति आपके ब्राउज़र में सेव होती है। प्रोफ़ाइल → डेमो रीसेट करें से दोबारा शुरू करें।',
+    s3h:'जाँचें आपके पास क्या है', s3:'CAS स्टेटमेंट और पूरा डैशबोर्ड खोलें। फिर स्कैम शील्ड आज़माएँ।',
+    dw_e:'लर्नर डैशबोर्ड', dw_h:'सीखने वाले ने जो कुछ किया, सब एक पेज पर', dw_p:'बाज़ार और नकद के मुक़ाबले संपत्ति, रोज़ का लाभ-हानि, होल्डिंग, T या T+1 टैग के साथ हर डिपॉज़िटरी घटना, कॉर्पोरेट एक्शन की कमाई, अलर्ट, सीखने की प्रगति और सुरक्षा जाँच। ऐप दूसरे टैब में खुला हो तो यह अपने-आप अपडेट होता है।', cta5:'डैशबोर्ड खोलें →', dw_s:'शुरू करने से पहले यह एक उदाहरण निवेशक दिखाता है।',
+    cta3:'प्रोटोटाइप खोलें →', cta4:'डैशबोर्ड देखें', reset:'प्रगति आपके ब्राउज़र में सेव होती है। प्रोफ़ाइल → डेमो रीसेट करें से दोबारा शुरू करें।',
     disc:'पहला कदम, CDSL रीइमेजिन आइडियाथॉन 2026 के लिए एक शैक्षिक प्रोटोटाइप है। यह CDSL का उत्पाद नहीं है। सभी नाम, अकाउंट नंबर, संदेश और भाव सिम्युलेटेड हैं, और कोई असली अकाउंट नहीं खुलता।',
     src:'GitHub पर सोर्स कोड'
   };

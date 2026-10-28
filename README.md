@@ -25,6 +25,7 @@ It's not a trading game. Each action explains what happens at the depository lay
 | Nomination | Nominee form; skipping it shows what happens without a nominee |
 | E-voting | A 3-line AGM resolution summary with For/Against/Abstain voting |
 | Learner dashboard | Your worth vs an equal-weight market benchmark and vs keeping cash (with hover and a table view), where your money is, a diversification tip, income from corporate actions, learning progress and a safety check |
+| Full-page dashboard (`app/index.html#dashboard`) | Wide dashboard: worth vs market vs cash with period picker, daily change bars, holdings table, depository activity ledger with T/T+1 tags and filters, corporate-action income, alerts, learning and safety. Shows a labelled example learner before you start; updates live from another tab. |
 | Scam Shield | 5 WhatsApp/SMS messages to judge, red flags, how to check SEBI registration |
 
 * ₹1,00,000 of virtual money, 10 large Indian companies, 60 simulated trading days (seeded random walk, labelled "simulated").

@@ -178,6 +178,46 @@ details summary{cursor:pointer;color:var(--pri);font-weight:700;min-height:40px;
 .tbl{width:100%;border-collapse:collapse;font-size:.82rem}
 .tbl th,.tbl td{padding:5px 4px;border-bottom:1px solid var(--line);text-align:right}
 .tbl th:first-child,.tbl td:first-child,.tbl th:nth-child(2),.tbl td:nth-child(2){text-align:left}
+
+body.wide #app{max-width:none;padding-bottom:0}
+.dp-top{position:sticky;top:0;z-index:20;background:var(--pri);color:#fff}
+.dp-in{max-width:1200px;margin:0 auto;padding:0 16px}
+.dp-top .dp-in{display:flex;align-items:center;gap:12px;padding-top:10px;padding-bottom:10px}
+.dp-back{min-height:44px;display:inline-flex;align-items:center;border-radius:12px;background:#fff;color:var(--pri2);font-weight:700;padding:8px 14px;text-decoration:none;white-space:nowrap}
+.dp-head{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:flex-end;justify-content:space-between;margin:18px 0 6px}
+.dp-head h1{font-size:1.6rem;margin:0}
+.dp-g{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:16px;margin:16px 0}
+.dp-g>.card{margin:0;min-width:0}
+.s3{grid-column:span 3}.s4{grid-column:span 4}.s5{grid-column:span 5}.s6{grid-column:span 6}.s7{grid-column:span 7}.s8{grid-column:span 8}.s12{grid-column:span 12}
+@media(max-width:980px){.s3{grid-column:span 6}.s4,.s5,.s7,.s8,.s6{grid-column:span 12}}
+@media(max-width:520px){.dp-g{gap:12px}.kpi{padding:12px}.kpi .big{font-size:1.15rem}}
+.dp-sample{margin-top:16px;align-items:center;flex-wrap:wrap}
+.dp-sample .grow{min-width:220px}
+@media(max-width:520px){.dp-sample .btn{width:100%}}
+.kpi small{display:block;font-size:.8rem}
+.kpi .big{font-size:1.5rem;font-variant-numeric:tabular-nums}
+.kpi .sub{font-size:.85rem;color:var(--mut);margin-top:2px}
+.dp-chart{position:relative;min-height:120px}
+.dp-chart .tip{position:absolute;top:0;pointer-events:none;background:#1f2328;color:#fff;border-radius:10px;padding:6px 9px;font-size:.78rem;line-height:1.4;white-space:nowrap;transform:translateX(-50%);display:none;z-index:2;font-variant-numeric:tabular-nums}
+.seg{display:inline-flex;border:2px solid var(--line);border-radius:12px;overflow:hidden}
+.seg button{border:0;background:#fff;min-height:40px;padding:6px 12px;font-weight:700;font-size:.85rem;color:var(--mut)}
+.seg button.on{background:var(--pri);color:#fff}
+.dtab{width:100%;border-collapse:collapse;font-size:.9rem;font-variant-numeric:tabular-nums}
+.dtab th{font-size:.74rem;color:var(--mut);text-transform:uppercase;letter-spacing:.03em;text-align:right;padding:8px 6px;border-bottom:2px solid var(--line);white-space:nowrap}
+.dtab td{padding:9px 6px;border-bottom:1px solid var(--line);text-align:right;vertical-align:top}
+.dtab th:first-child,.dtab td:first-child{text-align:left}
+.dtab tfoot td{font-weight:800;border-bottom:0}
+.dscroll{overflow-x:auto}
+.dscroll.tall{max-height:440px;overflow-y:auto}
+.dtab .ev{text-align:left}
+.dtab .ev .chip{margin-right:6px}
+.dlist{list-style:none;padding:0;margin:8px 0 0}
+.dlist li{display:flex;justify-content:space-between;gap:10px;align-items:center;padding:9px 0;border-bottom:1px solid var(--line);font-size:.92rem}
+.dlist li:last-child{border-bottom:0}
+.jgrid{display:grid;grid-template-columns:1fr 1fr;gap:4px 12px;margin-top:8px;font-size:.88rem}
+.jgrid span{display:flex;gap:6px;align-items:center}
+.jgrid .tick{width:20px;height:20px;font-size:.7rem}
+@media(max-width:520px){.jgrid{grid-template-columns:1fr}}
 .foot{font-size:.75rem;color:var(--mut);text-align:center;margin:20px 0 6px}
 svg{display:block}
 </style>
@@ -263,6 +303,20 @@ en:{
   db_learn:'Learning progress', db_lessons:'Lessons read', db_steps:'Journey steps', db_scam:'Scam Shield score', db_notyet:'Not played yet',
   db_safe:'Safety check', db_s_nom:'Nominee added', db_s_cas:'CAS statement checked', db_s_alerts:'All alerts reviewed', db_s_scam:'Scam Shield completed', db_s_pl:'No risky pledge', db_open:'Fix',
   db_lesson:'Why compare with the market?',
+  dp_title:'Learner dashboard', dp_h:'{name}’s dashboard', dp_back:'← Back to app', dp_open:'🖥️ Open full dashboard',
+  dp_sample:'Example learner', dp_sample_b:'You haven’t opened a practice account yet, so this page shows an example learner after {n} simulated days. None of it is your data.', dp_start:'Start my own account →',
+  dp_meta:'BO ID {bo} · {broker} · Day {n} of {t} · {date}',
+  dp_k_since:'{v} since day 1', dp_k_vs:'You vs the market', dp_k_vs_s:'You {a} · Market {b}', dp_k_cash:'Cash available', dp_k_cash_s:'{p} of your worth is not invested', dp_k_pend:'{n} order(s) waiting for T+1',
+  dp_k_journey:'Journey', dp_k_journey_s:'{lv} · {xp} XP',
+  dp_r_w:'1 week', dp_r_m:'1 month', dp_r_all:'All days', dp_daily:'Daily change in worth', dp_daily_h:'Buying or selling does not change your worth. Only price moves, dividends and bonus shares do.',
+  dp_hold:'Holdings', dp_h_co:'Company', dp_h_q:'Qty', dp_h_avg:'Avg price', dp_h_ltp:'Price now', dp_h_val:'Value', dp_h_pnl:'Gain/loss', dp_h_pend:'Pending T+1', dp_h_none:'No shares yet.', dp_h_tot:'Total',
+  dp_ca:'Corporate actions', dp_ca_got_div:'You got {amt}', dp_ca_got_sh:'+{q} shares', dp_ca_miss:'Not held on the record date',
+  dp_act:'Depository activity', dp_f_all:'All', dp_f_demat:'Demat', dp_f_cash:'Cash', dp_f_corp:'Corporate actions',
+  dp_a_date:'Date', dp_a_ev:'Event', dp_a_sh:'Shares', dp_a_cash:'Cash', dp_a_none:'Nothing here yet.',
+  dp_c_BUY:'T · trade', dp_c_CR:'T+1 · settled', dp_c_SELL:'eDIS · TPIN', dp_c_PAYIN:'T+1 · paid', dp_c_DIV:'Dividend', dp_c_BONUS:'Bonus', dp_c_SPLIT:'Split', dp_c_PLG:'Pledge', dp_c_UPLG:'Pledge',
+  dp_alerts:'Alerts from your phone', dp_al_cr:'Shares credited', dp_al_dr:'Shares debited', dp_al_pl:'Pledge', dp_al_ca:'Corporate actions', dp_al_other:'Other', dp_al_unread:'{n} unread', dp_al_allread:'All read',
+  dp_learn_next:'Read next', dp_live:'This page updates on its own while the app is open in another tab.',
+
 
 
   ca_div:'{co}: dividend ₹{amt} per share', ca_bonus:'{co}: bonus 1:1 (1 free share for every share)', ca_split:'{co}: stock split, 1 share → {r}',
@@ -477,6 +531,20 @@ hi:{
   db_learn:'सीखने की प्रगति', db_lessons:'पढ़े गए पाठ', db_steps:'यात्रा के कदम', db_scam:'स्कैम शील्ड स्कोर', db_notyet:'अभी नहीं खेला',
   db_safe:'सुरक्षा जाँच', db_s_nom:'नॉमिनी जोड़ा', db_s_cas:'CAS स्टेटमेंट जाँचा', db_s_alerts:'सारे अलर्ट देखे', db_s_scam:'स्कैम शील्ड पूरा किया', db_s_pl:'कोई जोखिम भरी गिरवी नहीं', db_open:'ठीक करें',
   db_lesson:'बाज़ार से तुलना क्यों करें?',
+  dp_title:'लर्नर डैशबोर्ड', dp_h:'{name} का डैशबोर्ड', dp_back:'← ऐप पर वापस', dp_open:'🖥️ पूरा डैशबोर्ड खोलें',
+  dp_sample:'उदाहरण निवेशक', dp_sample_b:'आपने अभी अभ्यास अकाउंट नहीं खोला है, इसलिए यह पेज {n} सिम्युलेटेड दिनों के बाद एक उदाहरण निवेशक दिखा रहा है। इसमें आपका कोई डेटा नहीं है।', dp_start:'अपना अकाउंट शुरू करें →',
+  dp_meta:'BO ID {bo} · {broker} · दिन {n} / {t} · {date}',
+  dp_k_since:'पहले दिन से {v}', dp_k_vs:'आप बनाम बाज़ार', dp_k_vs_s:'आप {a} · बाज़ार {b}', dp_k_cash:'उपलब्ध नकद', dp_k_cash_s:'आपकी संपत्ति का {p} निवेश नहीं हुआ', dp_k_pend:'{n} ऑर्डर T+1 के इंतज़ार में',
+  dp_k_journey:'यात्रा', dp_k_journey_s:'{lv} · {xp} XP',
+  dp_r_w:'1 हफ़्ता', dp_r_m:'1 महीना', dp_r_all:'सभी दिन', dp_daily:'संपत्ति में रोज़ का बदलाव', dp_daily_h:'खरीदने या बेचने से संपत्ति नहीं बदलती। सिर्फ़ भाव, डिविडेंड और बोनस शेयर उसे बदलते हैं।',
+  dp_hold:'होल्डिंग', dp_h_co:'कंपनी', dp_h_q:'मात्रा', dp_h_avg:'औसत कीमत', dp_h_ltp:'अभी का भाव', dp_h_val:'मूल्य', dp_h_pnl:'लाभ/हानि', dp_h_pend:'T+1 बाक़ी', dp_h_none:'अभी कोई शेयर नहीं।', dp_h_tot:'कुल',
+  dp_ca:'कॉर्पोरेट एक्शन', dp_ca_got_div:'आपको {amt} मिले', dp_ca_got_sh:'+{q} शेयर', dp_ca_miss:'रिकॉर्ड डेट पर पास नहीं था',
+  dp_act:'डिपॉज़िटरी गतिविधि', dp_f_all:'सभी', dp_f_demat:'डीमैट', dp_f_cash:'नकद', dp_f_corp:'कॉर्पोरेट एक्शन',
+  dp_a_date:'तारीख़', dp_a_ev:'घटना', dp_a_sh:'शेयर', dp_a_cash:'नकद', dp_a_none:'अभी यहाँ कुछ नहीं।',
+  dp_c_BUY:'T · सौदा', dp_c_CR:'T+1 · सेटल', dp_c_SELL:'eDIS · TPIN', dp_c_PAYIN:'T+1 · भुगतान', dp_c_DIV:'डिविडेंड', dp_c_BONUS:'बोनस', dp_c_SPLIT:'स्प्लिट', dp_c_PLG:'गिरवी', dp_c_UPLG:'गिरवी',
+  dp_alerts:'आपके फ़ोन पर आए अलर्ट', dp_al_cr:'शेयर जमा', dp_al_dr:'शेयर डेबिट', dp_al_pl:'गिरवी', dp_al_ca:'कॉर्पोरेट एक्शन', dp_al_other:'अन्य', dp_al_unread:'{n} अपठित', dp_al_allread:'सब पढ़ लिए',
+  dp_learn_next:'आगे पढ़ें', dp_live:'जब ऐप दूसरे टैब में खुला हो, यह पेज अपने-आप अपडेट होता है।',
+
 
 
   ca_div:'{co}: ₹{amt} प्रति शेयर डिविडेंड', ca_bonus:'{co}: बोनस 1:1 (हर शेयर पर 1 मुफ़्त शेयर)', ca_split:'{co}: स्टॉक स्प्लिट, 1 शेयर → {r}',
@@ -671,6 +739,7 @@ const DATES = [];
 
 /* ---------------- State & storage ---------------- */
 const KEY = 'pehlaKadam.v1';
+let QUIET = false; // true while simulating the example learner: no saving, rendering, toasts or modals
 let storageOK = true;
 function fresh(lang){
   return {v:1, lang:lang||'en', onb:0, kyc:{name:'',pan:'',aad:'',mob:''}, broker:null, boId:'', tpin:'',
@@ -685,10 +754,10 @@ function load(){
   }catch(e){ storageOK = false; }
   return fresh();
 }
-function save(){ try{ localStorage.setItem(KEY, JSON.stringify(S)); storageOK = true; }catch(e){ storageOK = false; } }
+function save(){ if(QUIET) return; try{ localStorage.setItem(KEY, JSON.stringify(S)); storageOK = true; }catch(e){ storageOK = false; } }
 let S = load();
 try{ const k='__pk_test'; localStorage.setItem(k,'1'); localStorage.removeItem(k); }catch(e){ storageOK = false; }
-const ui = {tab:'home', view:null, sym:null, qty:1, casM:null, modal:null, queue:[]};
+const ui = {page:null, tab:'home', view:null, sym:null, qty:1, casM:null, modal:null, queue:[]};
 
 /* ---------------- Helpers ---------------- */
 function tr(k){ const L=T[S.lang]; return (L && L[k]!==undefined) ? L[k] : T.en[k]; }
@@ -741,6 +810,7 @@ function fill(v){
 
 /* ---------------- Toasts ---------------- */
 function toast(msg){
+  if(QUIET) return;
   const el = document.getElementById('toast');
   const d = document.createElement('div'); d.textContent = msg; el.appendChild(d);
   while(el.children.length>2) el.removeChild(el.firstChild);
@@ -836,7 +906,7 @@ function nextDay(){
 }
 
 /* ---------------- Modal queue ---------------- */
-function openModal(m){ if(ui.modal) ui.queue.push(m); else ui.modal = m; renderModal(); }
+function openModal(m){ if(QUIET) return; if(ui.modal) ui.queue.push(m); else ui.modal = m; renderModal(); }
 function closeModal(){ ui.modal = ui.queue.shift() || null; renderModal(); }
 
 /* ---------------- Small render helpers ---------------- */
@@ -1291,6 +1361,7 @@ function vDash(){
       <div class="tr" title="${esc(label)}: ${fm0(v)} (${p.toFixed(1)}%)"><i style="width:${Math.max(p,0.5)}%;background:${color}"></i></div></div>`; };
   return `<div class="wrap"><button class="link" data-a="back">${t('back')}</button>
     <h1>📊 ${t('db_title')}</h1><p class="mut">${t('db_sub')}</p>
+    <button class="btn block" data-a="dp_open">${t('dp_open')}</button>
     <div class="card">
       <small>${t('h_net')}</small><div class="big">${fm(nw)}</div>
       <div class="kv"><div><small>${t('db_ret')}</small><b class="${cls(r)}">${pct(r)}</b></div><div><small>${t('db_mret')}</small><b class="${cls(mr)}">${pct(mr)}</b></div></div>
@@ -1473,6 +1544,233 @@ function modalHTML(m){
   return '';
 }
 
+
+/* ---------------- Full-page dashboard (app/index.html#dashboard) ---------------- */
+const DP = {range:'all', filter:'all', data:null};
+// Plays a scripted journey on a throwaway state so the page has something to show before the user starts
+function sampleState(){
+  const real = S; QUIET = true;
+  try{
+    S = fresh(real.lang);
+    const hi = real.lang==='hi';
+    S.onb = 4; S.kyc = {name:hi?'आशा वर्मा':'Asha Verma', pan:'ABCPV4821K', aad:'912345678901', mob:'9876504417'};
+    S.broker = 'b2'; S.boId = '1203320000044417'; S.tpin = '482916';
+    addSms('sms_welcome',{}); addMs('onboard');
+    placeBuy('ITC',20); placeBuy('INFY',10); placeBuy('ASIANPAINT',4); placeBuy('HDFCBANK',8);
+    nextDay(); nextDay(); placeBuy('SBIN',30);
+    for(let i=0;i<4;i++) nextDay();
+    placeSell('ITC',5);
+    for(let i=0;i<9;i++) nextDay();
+    S.hold.INFY.pl += 10; addTx({k:'PLG', sym:'INFY', q:10, dp:10}); addSms('sms_plg',{sym:'INFY', q:10}); S.plBase = margin(); addMs('pledge');
+    S.nominee = {name:hi?'मीरा वर्मा':'Meera Verma', rel:0}; addSms('sms_nom',{}); addMs('nominee'); addMs('cas');
+    S.votes.ITC = 'for'; addSms('sms_vote',{sym:'ITC'}); addMs('vote');
+    for(let i=0;i<14;i++) nextDay();
+    placeBuy('BHARTIARTL',6);
+    for(let i=0;i<4;i++) nextDay();
+    ['accounts','kyc','boid','order','settlement','alerts','tpin','cas','dividend','bonus','pledge','nominee'].forEach(k=>{ S.learned[k] = 1; addXP(10); });
+    S.scam = {i:5, ans:['scam','safe','scam','scam','scam']}; S.scamDone = true; addXP(80); addMs('scam');
+    S.smsRead = S.sms.length-3;
+    return S;
+  } finally { S = real; QUIET = false; }
+}
+function dpChip(k){
+  const c = {BUY:'t',CR:'g',SELL:'r',PAYIN:'g',DIV:'p',BONUS:'p',SPLIT:'p',PLG:'',UPLG:''}[k];
+  return `<span class="chip ${c||''}">${t('dp_c_'+k)}</span>`;
+}
+function dpCash(x){ return x.k==='BUY' ? -x.amt : (x.k==='PAYIN'||x.k==='DIV') ? x.amt : 0; }
+function dpHTML(sample){
+  const you = worthSeries(), mkt = marketSeries(), n = you.length;
+  const nw = you[n-1], r = (nw/START_CASH-1)*100, mr = (mkt[n-1]/START_CASH-1)*100, gap = r-mr;
+  const cmp = Math.abs(gap)<0.05 ? t('db_even') : gap>0 ? t('db_beat',{p:Math.abs(gap).toFixed(2)+'%'}) : t('db_behind',{p:Math.abs(gap).toFixed(2)+'%'});
+  DP.data = {you, mkt, days:you.map((v,i)=>i)};
+  // holdings and allocation
+  const syms = Object.keys(S.hold).filter(k=>S.hold[k].q>0).sort((a,b)=>S.hold[b].q*price(b)-S.hold[a].q*price(a));
+  const pend = S.pend.filter(p=>p.side==='B');
+  let tv = 0, tc = 0;
+  const hrows = syms.map(k=>{
+    const h = S.hold[k], p = price(k), v = h.q*p, c = h.q*h.avg, g = v-c; tv += v; tc += c;
+    return `<tr><td><b>${SMAP[k].e} ${nm(k)}</b><br><small class="mut">${SMAP[k].isin}</small>${h.pl?` <span class="chip p">${t('pl_locked',{q:h.pl})}</span>`:''}</td>
+      <td>${num(h.q,0)}</td><td>${fm(h.avg)}</td><td>${fm(p)}</td><td><b>${fm(v)}</b></td><td class="${cls(g)}"><b>${sgn(g)}</b><br><small>${pct(c?g/c*100:0)}</small></td></tr>`;
+  }).join('') + pend.map(p=>`<tr><td><b>${SMAP[p.sym].e} ${nm(p.sym)}</b> <span class="chip">${t('dp_h_pend')}</span><br><small class="mut">${t('pf_pend_b',{q:p.q,co:nm(p.sym),date:fdate(p.d+1)})}</small></td><td>${p.q}</td><td>${fm(p.px)}</td><td>${fm(price(p.sym))}</td><td>${fm(p.q*price(p.sym))}</td><td></td></tr>`).join('');
+  const val = {};
+  syms.forEach(k=>val[k] = S.hold[k].q*price(k));
+  pend.forEach(p=>val[p.sym] = (val[p.sym]||0)+p.q*price(p.sym));
+  const total = netWorth(), shares = Object.keys(val).reduce((a,k)=>a+val[k],0), arows = Object.keys(val).sort((a,b)=>val[b]-val[a]);
+  const cashNow = total-shares, top = arows[0], topP = shares ? val[top]/shares*100 : 0;
+  const abar = (label, v, color)=>{ const p = total ? v/total*100 : 0;
+    return `<div class="abar"><div class="between"><span><b>${label}</b></span><span><b>${fm0(v)}</b> <small>${p.toFixed(1)}%</small></span></div><div class="tr" title="${esc(label)}: ${fm0(v)} (${p.toFixed(1)}%)"><i style="width:${Math.max(p,0.5)}%;background:${color}"></i></div></div>`; };
+  // corporate actions
+  const divs = S.tx.filter(x=>x.k==='DIV').reduce((a,x)=>a+x.amt,0), free = S.tx.filter(x=>x.k==='BONUS'||x.k==='SPLIT').reduce((a,x)=>a+x.q,0);
+  const caRows = CA.map(c=>{
+    const x = S.tx.find(x=>x.sym===c.sym && x.d===c.day && (x.k==='DIV'||x.k==='BONUS'||x.k==='SPLIT'));
+    const st = !S.caSeen[c.id] ? `<span class="chip t">${c.day===S.day?t('ca_today'):t('ca_in',{n:c.day-S.day})}</span>`
+      : x ? `<span class="chip g">${x.k==='DIV'?t('dp_ca_got_div',{amt:fm(x.amt)}):t('dp_ca_got_sh',{q:x.q})}</span>` : `<span class="chip">${t('dp_ca_miss')}</span>`;
+    return `<li><span class="grow"><b>${caLabel(c)}</b><br><small class="mut">${t('ca_rec',{date:fdate(c.day)})}</small></span>${st}</li>`;
+  }).join('');
+  // activity
+  const F = {all:()=>true, demat:x=>x.dq||x.dp, cash:x=>dpCash(x)!==0, corp:x=>x.k==='DIV'||x.k==='BONUS'||x.k==='SPLIT'};
+  const acts = S.tx.filter(F[DP.filter]).slice().reverse();
+  // alerts
+  const AL = {dp_al_cr:['sms_cr','sms_bonus','sms_split'], dp_al_dr:['sms_dr'], dp_al_pl:['sms_otp','sms_plg','sms_uplg','sms_warn'], dp_al_ca:['sms_div']};
+  const alC = {}; let known = 0;
+  Object.keys(AL).forEach(k=>{ alC[k] = S.sms.filter(m=>AL[k].indexOf(m.k)>=0).length; known += alC[k]; });
+  alC.dp_al_other = S.sms.length-known;
+  const maxAl = Math.max(1, ...Object.values(alC)), unread = S.sms.length-S.smsRead;
+  // learning and safety
+  const lessons = LESSON_ORDER.filter(k=>S.learned[k]).length, steps = MS.filter(k=>S.ms[k]).length, L = tr('L');
+  const nextL = LESSON_ORDER.filter(k=>!S.learned[k]).slice(0,3);
+  const SC = tr('SC'), scamRight = S.scamDone ? S.scam.ans.filter((a,i)=>a===SC[i].a).length : null;
+  const plDrop = S.plBase>0 ? Math.round((1-margin()/S.plBase)*100) : 0;
+  const safe = [['db_s_nom',!!S.nominee,'nominee'],['db_s_cas',!!S.ms.cas,'cas'],['db_s_alerts',unread===0,'inbox'],['db_s_scam',S.scamDone,'scam'],['db_s_pl',plDrop<5,'pledge']];
+  const pendN = S.pend.length, name = (S.kyc.name||'').split(' ')[0];
+  const seg = (key, opts)=>`<div class="seg" role="group">${opts.map(([v,l])=>`<button class="${DP[key]===v?'on':''}" data-a="dp_set" data-x="${key}|${v}" aria-pressed="${DP[key]===v}">${l}</button>`).join('')}</div>`;
+  return `<header class="dp-top"><div class="dp-in">
+      <div class="brand"><span class="logo">👣</span><div><b>${t('app')}</b><small>${t('dp_title')}</small></div></div>
+      <button class="langbtn" data-a="lang" aria-label="Language">${S.lang==='en'?'हिंदी':'EN'}</button>
+      <a class="dp-back" href="#" data-a="dp_close">${t('dp_back')}</a>
+    </div></header>
+  <main class="dp-in">
+    ${sample?`<div class="sakhi dp-sample"><div class="av">👩🏽‍🏫</div><div class="grow"><span class="chip p">${t('dp_sample')}</span><p>${t('dp_sample_b',{n:S.day+1})}</p></div><button class="btn rose" data-a="dp_close">${t('dp_start')}</button></div>`:''}
+    <div class="dp-head"><div><h1>${t('dp_h',{name:esc(name)})}</h1><small class="mut">${t('dp_meta',{bo:fmtBo(S.boId),broker:brokerName(),n:S.day+1,t:PLAY,date:fdate(S.day,{weekday:'short',day:'numeric',month:'short',year:'numeric'})})}</small></div><span class="chip">⚠️ ${t('sim')}</span></div>
+
+    <div class="dp-g">
+      <div class="card kpi s3"><small>${t('h_net')}</small><div class="big">${fm(nw)}</div><div class="sub"><b class="${cls(nw-START_CASH)}">${t('dp_k_since',{v:sgn(nw-START_CASH)+' ('+pct(r)+')'})}</b></div></div>
+      <div class="card kpi s3"><small>${t('dp_k_vs')}</small><div class="big ${cls(gap)}">${pct(gap)}</div><div class="sub">${t('dp_k_vs_s',{a:pct(r),b:pct(mr)})}</div></div>
+      <div class="card kpi s3"><small>${t('dp_k_cash')}</small><div class="big">${fm(S.cash)}</div><div class="sub">${pendN?t('dp_k_pend',{n:pendN}):t('dp_k_cash_s',{p:(total?cashNow/total*100:0).toFixed(0)+'%'})}</div></div>
+      <div class="card kpi s3"><small>${t('dp_k_journey')}</small><div class="big">${steps} / ${MS.length}</div><div class="sub">${t('dp_k_journey_s',{lv:t(level()),xp:S.xp})}</div></div>
+    </div>
+
+    <div class="dp-g">
+      <div class="card s8">
+        <div class="between" style="flex-wrap:wrap"><h3>${t('db_chart')}</h3>${seg('range',[['w',t('dp_r_w')],['m',t('dp_r_m')],['all',t('dp_r_all')]])}</div>
+        <p style="margin:8px 0 2px"><b>${gap>=0?'🏆':'📏'} ${cmp}</b></p>
+        <div class="legend"><span><i style="border-color:${C_YOU}"></i>${t('db_you')}</span><span><i style="border-color:${C_MKT}"></i>${t('db_mkt')}</span><span><i class="dash" style="border-color:${C_CASH}"></i>${t('db_cash')}</span></div>
+        <div class="dp-chart" id="dp-line"></div>
+        <h3 style="margin-top:14px">${t('dp_daily')}</h3><p class="hint" style="margin-top:0">${t('dp_daily_h')}</p>
+        <div class="dp-chart" id="dp-bars"></div>
+        <p class="hint">${t('db_mkt_h')}</p>
+        <details><summary>${t('db_table')}</summary><div class="dscroll tall"><table class="dtab"><thead><tr><th>${t('db_day')}</th><th>${t('db_date')}</th><th>${t('db_you')}</th><th>${t('db_mkt')}</th><th>${t('dp_daily')}</th></tr></thead>
+          <tbody>${you.map((v,i)=>i).reverse().map(i=>`<tr><td>${i+1}</td><td>${fdate(i)}</td><td>${fm0(you[i])}</td><td>${fm0(mkt[i])}</td><td class="${cls(i?you[i]-you[i-1]:0)}">${i?sgn(you[i]-you[i-1]):'–'}</td></tr>`).join('')}</tbody></table></div></details>
+        <button class="link" data-a="lesson" data-x="bench">${t('db_lesson')} →</button>
+      </div>
+      <div class="card s4">
+        <h3>${t('db_alloc')}</h3><small class="mut">${t('db_alloc_sub')}</small>
+        ${arows.map(k=>abar(SMAP[k].e+' '+nm(k), val[k], C_YOU)).join('')}
+        ${abar('💵 '+t('db_alloc_cash'), cashNow, C_CASH)}
+        ${!arows.length ? sakhi(t('db_noshares')) : topP>40 ? sakhi(t('db_conc',{co:nm(top),p:topP.toFixed(0)+'%'}),'bench') : sakhi(t('db_div_ok',{n:arows.length}))}
+      </div>
+    </div>
+
+    <div class="dp-g">
+      <div class="card s8"><h3>${t('dp_hold')}</h3>
+        ${hrows?`<div class="dscroll"><table class="dtab"><thead><tr><th>${t('dp_h_co')}</th><th>${t('dp_h_q')}</th><th>${t('dp_h_avg')}</th><th>${t('dp_h_ltp')}</th><th>${t('dp_h_val')}</th><th>${t('dp_h_pnl')}</th></tr></thead><tbody>${hrows}</tbody>
+          <tfoot><tr><td>${t('dp_h_tot')}</td><td></td><td></td><td></td><td>${fm(tv)}</td><td class="${cls(tv-tc)}">${sgn(tv-tc)}</td></tr></tfoot></table></div>`:`<p class="mut">${t('dp_h_none')}</p>`}
+      </div>
+      <div class="card s4"><h3>${t('dp_ca')}</h3><ul class="dlist">${caRows}</ul>
+        <div class="kv" style="margin-top:10px"><div><small>${t('db_divs')}</small><b>${fm(divs)}</b></div><div><small>${t('db_free')}</small><b>+${num(free,0)}</b></div></div>
+      </div>
+    </div>
+
+    <div class="dp-g">
+      <div class="card s12">
+        <div class="between" style="flex-wrap:wrap"><h3>${t('dp_act')}</h3>${seg('filter',[['all',t('dp_f_all')],['demat',t('dp_f_demat')],['cash',t('dp_f_cash')],['corp',t('dp_f_corp')]])}</div>
+        ${acts.length?`<div class="dscroll tall" style="margin-top:10px"><table class="dtab"><thead><tr><th>${t('dp_a_date')}</th><th style="text-align:left">${t('dp_a_ev')}</th><th>${t('dp_a_sh')}</th><th>${t('dp_a_cash')}</th></tr></thead><tbody>
+          ${acts.map(x=>{ const c = dpCash(x), q = x.dq||x.dp||0; return `<tr><td>${fdate(x.d)}</td><td class="ev">${dpChip(x.k)}${esc(txText(x))}</td><td class="${x.dp&&!x.dq?'':cls(q)}">${q?(x.dp&&!x.dq?'🔒 ':'')+(q>0?'+':'')+num(q,0):''}</td><td class="${cls(c)}">${c?sgn(c):''}</td></tr>`; }).join('')}
+        </tbody></table></div>`:`<p class="mut">${t('dp_a_none')}</p>`}
+      </div>
+    </div>
+
+    <div class="dp-g">
+      <div class="card s4"><h3>${t('db_learn')}</h3>
+        <div class="between"><small>${t('db_lessons')}</small><b>${lessons} / ${LESSON_ORDER.length}</b></div><div class="prog"><i style="width:${lessons/LESSON_ORDER.length*100}%"></i></div>
+        <div class="between"><small>${t('db_scam')}</small><b>${scamRight==null?t('db_notyet'):scamRight+' / '+SC.length}</b></div>
+        <div class="jgrid">${MS.map(k=>`<span><span class="tick ${S.ms[k]?'on':''}">${S.ms[k]?'✓':''}</span>${t('m_'+k)}</span>`).join('')}</div>
+        ${nextL.length?`<p style="margin-top:12px"><small class="mut">${t('dp_learn_next')}</small></p>${nextL.map(k=>`<button class="link" style="display:block" data-a="lesson" data-x="${k}">${LESSON_ICON[k]} ${L[k].t}</button>`).join('')}`:''}
+      </div>
+      <div class="card s4"><h3>🛡️ ${t('db_safe')} <small class="mut">${safe.filter(x=>x[1]).length} / ${safe.length}</small></h3>
+        <ul class="jl">${safe.map(([k,ok,go])=>`<li><button data-a="dp_go" data-x="${go}"><span class="tick ${ok?'on':''}">${ok?'✓':'!'}</span><span class="grow">${t(k)}</span>${ok?'':`<span class="chip r">${t('db_open')}</span>`}</button></li>`).join('')}</ul>
+      </div>
+      <div class="card s4"><div class="between"><h3>📲 ${t('dp_alerts')}</h3><span class="chip ${unread?'r':'g'}">${unread?t('dp_al_unread',{n:unread}):t('dp_al_allread')}</span></div>
+        ${Object.keys(alC).map(k=>`<div class="abar"><div class="between"><small>${t(k)}</small><b>${alC[k]}</b></div><div class="tr"><i style="width:${alC[k]/maxAl*100}%;background:var(--pri)"></i></div></div>`).join('')}
+        ${S.sms.slice(-2).reverse().map(smsHTML).join('')}
+      </div>
+    </div>
+    <p class="foot">${t('dp_live')}<br>${t('pr_about_b')}</p>
+  </main>`;
+}
+// Line chart sized to its container, with crosshair + tooltip
+function dpLine(el, idx, series){
+  const W = Math.max(260, el.clientWidth), sm = W<560, H = sm?220:280, pl = 58, pr = sm?72:88, pt = 12, pb = 26, n = idx.length;
+  const all = []; series.forEach(s=>idx.forEach(i=>all.push(s.data[i])));
+  let mn = Math.min.apply(null,all), mx = Math.max.apply(null,all); const pad = Math.max((mx-mn)*0.1, 400); mn -= pad; mx += pad;
+  const x = j=>pl + (n>1 ? j/(n-1) : .5)*(W-pl-pr), y = v=>pt + (1-(v-mn)/(mx-mn))*(H-pt-pb);
+  const ticks = [0,1,2,3].map(k=>mn+(mx-mn)*(k+.5)/4);
+  const xl = n>1 ? [...new Set(sm ? [0,Math.round((n-1)/2),n-1] : [0,Math.round((n-1)/4),Math.round((n-1)/2),Math.round(3*(n-1)/4),n-1])] : [0];
+  const ends = series.map(s=>({l:s.name, y:y(s.data[idx[n-1]])})).sort((a,b)=>a.y-b.y);
+  for(let i=1;i<ends.length;i++) if(ends[i].y-ends[i-1].y<14) ends[i].y = ends[i-1].y+14;
+  el.innerHTML = `<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" role="img" aria-label="${t('db_chart')}">
+    ${ticks.map(v=>`<line x1="${pl}" x2="${W-pr}" y1="${y(v).toFixed(1)}" y2="${y(v).toFixed(1)}" stroke="#ece7de"/><text x="${pl-6}" y="${(y(v)+4).toFixed(1)}" font-size="11" fill="#5f6670" text-anchor="end">${fL(v)}</text>`).join('')}
+    ${xl.map(j=>`<text x="${x(j).toFixed(1)}" y="${H-6}" font-size="11" fill="#5f6670" text-anchor="${j===0&&n>1?'start':j===n-1&&n>1?'end':'middle'}">${fdate(idx[j])}</text>`).join('')}
+    ${series.map(s=>`<polyline fill="none" stroke="${s.color}" stroke-width="${s.w||2}" ${s.dash?'stroke-dasharray="5 4"':''} stroke-linejoin="round" stroke-linecap="round" points="${idx.map((i,j)=>x(j).toFixed(1)+','+y(s.data[i]).toFixed(1)).join(' ')}"/>`).join('')}
+    ${series.filter(s=>!s.dash).map(s=>`<circle cx="${x(n-1).toFixed(1)}" cy="${y(s.data[idx[n-1]]).toFixed(1)}" r="4.5" fill="${s.color}" stroke="#fff" stroke-width="2"/>`).join('')}
+    ${ends.map(e=>`<text x="${W-pr+8}" y="${(e.y+4).toFixed(1)}" font-size="12" font-weight="700" fill="#1f2328">${esc(e.l)}</text>`).join('')}
+    <line class="cx" y1="${pt}" y2="${H-pb}" stroke="#5f6670" opacity="0"/>
+    ${series.filter(s=>!s.dash).map((s,k)=>`<circle class="cd" data-k="${k}" r="5.5" fill="${s.color}" stroke="#fff" stroke-width="2" opacity="0"/>`).join('')}
+    <rect class="hit" x="${pl-10}" y="0" width="${W-pl-pr+20}" height="${H}" fill="transparent" style="touch-action:pan-y"/>
+  </svg><div class="tip"></div>`;
+  const hit = el.querySelector('.hit'), tip = el.querySelector('.tip'), cxl = el.querySelector('.cx'), dots = el.querySelectorAll('.cd'), solid = series.filter(s=>!s.dash);
+  const show = ev=>{
+    const r = el.getBoundingClientRect(), j = n>1 ? Math.max(0,Math.min(n-1,Math.round((ev.clientX-r.left-pl)/(W-pl-pr)*(n-1)))) : 0, X = x(j);
+    cxl.setAttribute('x1',X); cxl.setAttribute('x2',X); cxl.setAttribute('opacity','.5');
+    dots.forEach((d,k)=>{ d.setAttribute('cx',X); d.setAttribute('cy',y(solid[k].data[idx[j]])); d.setAttribute('opacity','1'); });
+    tip.innerHTML = `<b>${fdate(idx[j],{weekday:'short',day:'numeric',month:'short'})}</b>`+series.map(s=>`<br><span style="color:${s.tipColor||s.color}">●</span> ${esc(s.name)}: ${fm0(s.data[idx[j]])}`).join('');
+    tip.style.display = 'block'; tip.style.left = Math.max(80, Math.min(W-80, X))+'px';
+  };
+  const hide = ()=>{ tip.style.display = 'none'; cxl.setAttribute('opacity','0'); dots.forEach(d=>d.setAttribute('opacity','0')); };
+  hit.addEventListener('pointermove', show); hit.addEventListener('pointerdown', show); hit.addEventListener('pointerleave', hide);
+}
+// Diverging bars for day-on-day change, zero line in the middle
+function dpBars(el, idx, data){
+  const W = Math.max(260, el.clientWidth), sm = W<560, H = 130, pl = 58, pr = sm?72:88, pt = 8, pb = 8, n = idx.length;
+  const d = idx.map(i=>i>0 ? data[i]-data[i-1] : 0), m = Math.max(100, ...d.map(Math.abs));
+  const y = v=>pt + (1-(v+m)/(2*m))*(H-pt-pb), slot = (W-pl-pr)/Math.max(1,n), bw = Math.max(2, Math.min(16, slot*.66));
+  const x = j=>pl + slot*j + (slot-bw)/2;
+  el.innerHTML = `<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" role="img" aria-label="${t('dp_daily')}">
+    <text x="${pl-6}" y="${y(m)+10}" font-size="11" fill="#5f6670" text-anchor="end">+${fm0(m)}</text>
+    <text x="${pl-6}" y="${y(-m)}" font-size="11" fill="#5f6670" text-anchor="end">−${fm0(m)}</text>
+    ${d.map((v,j)=>{ const h = Math.abs(y(v)-y(0)); return `<rect x="${x(j).toFixed(1)}" y="${(v>=0?y(v):y(0)).toFixed(1)}" width="${bw.toFixed(1)}" height="${Math.max(h,v?1:0).toFixed(1)}" rx="2" fill="${v>=0?'#15803d':'#b91c1c'}"/>`; }).join('')}
+    <line x1="${pl}" x2="${W-pr}" y1="${y(0)}" y2="${y(0)}" stroke="#9a948a"/>
+    <rect class="hit" x="${pl}" y="0" width="${W-pl-pr}" height="${H}" fill="transparent" style="touch-action:pan-y"/>
+  </svg><div class="tip"></div>`;
+  const hit = el.querySelector('.hit'), tip = el.querySelector('.tip');
+  hit.addEventListener('pointermove', ev=>{
+    const r = el.getBoundingClientRect(), j = Math.max(0,Math.min(n-1,Math.floor((ev.clientX-r.left-pl)/slot)));
+    tip.innerHTML = `<b>${fdate(idx[j],{weekday:'short',day:'numeric',month:'short'})}</b><br>${d[j]>=0?'▲':'▼'} ${sgn(d[j])}`;
+    tip.style.display = 'block'; tip.style.left = Math.max(70, Math.min(W-70, x(j)+bw/2))+'px';
+  });
+  hit.addEventListener('pointerleave', ()=>{ tip.style.display = 'none'; });
+}
+function dpDraw(){
+  const D = DP.data, line = document.getElementById('dp-line'), bars = document.getElementById('dp-bars');
+  if(!D || !line) return;
+  const n = D.you.length, k = DP.range==='w' ? 5 : DP.range==='m' ? 22 : n, idx = D.days.slice(Math.max(0,n-k));
+  const flat = D.you.map(()=>START_CASH);
+  dpLine(line, idx, [{name:t('db_cash'),color:C_CASH,data:flat,dash:true},{name:t('db_mkt'),color:C_MKT,data:D.mkt,tipColor:'#fbbf24'},{name:t('db_you'),color:C_YOU,data:D.you,w:2.6,tipColor:'#5eead4'}]);
+  dpBars(bars, idx, D.you);
+}
+function renderDashPage(){
+  const real = S, sample = real.onb<4;
+  if(sample) S = sampleState();
+  try{ app.innerHTML = dpHTML(sample); } finally { S = real; }
+  dpDraw();
+}
+let dpResize = null;
+window.addEventListener('resize', ()=>{ if(ui.page!=='dash') return; clearTimeout(dpResize); dpResize = setTimeout(dpDraw, 150); });
+// Keep the dashboard (and any other open tab) in step with changes made in another tab
+window.addEventListener('storage', e=>{ if(e.key===KEY){ S = load(); if(!ui.modal) render(); } });
+function route(){ ui.page = location.hash==='#dashboard' ? 'dash' : null; render(); window.scrollTo(0,0); }
+window.addEventListener('hashchange', route);
+
 /* ---------------- Render ---------------- */
 const app = document.getElementById('app'), modalEl = document.getElementById('modal');
 function header(){
@@ -1487,8 +1785,11 @@ function nav(){
   return `<nav class="nav">${tabs.map(([k,i])=>`<button class="${ui.tab===k?'on':''}" data-a="tab" data-x="${k}"><span class="i">${i}</span>${t('nav_'+(k==='portfolio'?'port':k))}</button>`).join('')}</nav>`;
 }
 function render(){
+  if(QUIET) return;
   document.documentElement.lang = S.lang==='hi'?'hi':'en';
   document.title = t('app');
+  document.body.classList.toggle('wide', ui.page==='dash');
+  if(ui.page==='dash'){ renderDashPage(); renderModal(); return; }
   let body;
   if(S.onb===0) body = vWelcome();
   else if(S.onb===1) body = vKyc();
@@ -1658,7 +1959,11 @@ const ACT = {
     ui.tab = 'home'; ui.view = null; ui.modal = null; ui.queue = []; ui.casM = null;
     render(); window.scrollTo(0,0);
   },
-  cert(){ openModal({type:'cert'}); }
+  cert(){ openModal({type:'cert'}); },
+  dp_open(){ location.hash = 'dashboard'; },
+  dp_close(){ history.replaceState(null,'',location.pathname+location.search); route(); },
+  dp_go(x){ history.replaceState(null,'',location.pathname+location.search); ui.page = null; goView(x); },
+  dp_set(x){ const [k,v] = x.split('|'); DP[k] = v; render(); }
 };
 
 document.addEventListener('click', e=>{
@@ -1678,7 +1983,7 @@ document.addEventListener('keydown', e=>{
   if(id==='tpin') ACT.sell_ok(); else if(id==='otp') ACT.pledge_ok();
 });
 
-render();
+route();
 </script>
 </body>
 </html>

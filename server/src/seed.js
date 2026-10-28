@@ -47,9 +47,9 @@ function journey(i, [name, lang, depth]){
   return S;
 }
 
-function main(){
-  const db = open(DB_FILE);
-  const out = tx(db, () => {
+// Replaces any existing demo users with a fresh demo group. Returns the join code and an example login.
+function seedDemo(db){
+  return tx(db, () => {
     db.prepare('DELETE FROM users WHERE is_demo = 1').run();
     const mentorId = db.prepare("INSERT INTO users (role, name, login, secret_hash, is_demo) VALUES ('mentor', ?, ?, ?, 1)")
       .run('Demo Facilitator', MENTOR_EMAIL, A.hashSecret(MENTOR_PASSWORD)).lastInsertRowid;
@@ -65,6 +65,12 @@ function main(){
     });
     return { code, first: db.prepare("SELECT login FROM users WHERE is_demo = 1 AND role = 'learner' ORDER BY id LIMIT 1").get().login };
   });
+}
+function hasDemo(db){ return !!db.prepare("SELECT 1 FROM users WHERE is_demo = 1 AND role = 'mentor'").get(); }
+
+function main(){
+  const db = open(DB_FILE);
+  const out = seedDemo(db);
   db.close();
   console.log(`Seeded ${PEOPLE.length} demo learners into ${DB_FILE}`);
   console.log(`  Facilitator login: ${MENTOR_EMAIL} / ${MENTOR_PASSWORD}`);
@@ -73,4 +79,4 @@ function main(){
 }
 
 if(require.main === module) main();
-module.exports = { journey, PEOPLE };
+module.exports = { journey, PEOPLE, seedDemo, hasDemo, MENTOR_EMAIL, LEARNER_PIN };

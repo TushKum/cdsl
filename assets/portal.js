@@ -56,7 +56,17 @@
       .then(function(r){ return r.text().then(function(x){ var d = null; try{ d = x ? JSON.parse(x) : null; }catch(e){} return {status:r.status, data:d}; }); })
       .catch(function(){ return {status:0, data:null}; });
   };
-  P.health = function(){ return P.api('GET', '/api/health').then(function(r){ return r.status === 200 && r.data && r.data.service === 'pehla-kadam'; }); };
+  // Free-plan servers sleep when idle and take up to a minute to answer the first request,
+  // so a "waking up" note (#waking) appears if the check is slow. #eph shows on servers whose data is temporary.
+  P.health = function(){
+    var w = document.getElementById('waking'), slow = setTimeout(function(){ if(w) w.hidden = false; }, 2500);
+    return P.api('GET', '/api/health').then(function(r){
+      clearTimeout(slow); if(w) w.hidden = true;
+      var ok = r.status === 200 && r.data && r.data.service === 'pehla-kadam';
+      var e = document.getElementById('eph'); if(e) e.hidden = !(ok && r.data.ephemeral);
+      return ok;
+    });
+  };
 
   P.esc = function(s){ return String(s == null ? '' : s).replace(/[&<>"']/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); };
   P.num = function(n, d){ try{ return Number(n).toLocaleString('en-IN', {minimumFractionDigits:d||0, maximumFractionDigits:d||0}); }catch(e){ return String(n); } };

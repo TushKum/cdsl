@@ -1,17 +1,21 @@
-# Render blueprint: one web service with a persistent disk for the SQLite file.
-# Persistent disks need a paid instance type on Render.
+# Render blueprint for the free plan.
+# Free web services have no persistent disk and sleep after ~15 idle minutes, so the
+# SQLite file lives in /tmp and is wiped on every restart, sleep or redeploy.
+# SEED_DEMO reloads the demo group each time; EPHEMERAL_STORAGE makes the app and
+# portals tell people that backups on this server are temporary.
+# For lasting data, switch to a paid plan and add a disk (see README).
 services:
   - type: web
     name: pehla-kadam
     runtime: docker
-    plan: starter
+    plan: free
     healthCheckPath: /api/health
     envVars:
       - key: DB_FILE
-        value: /data/pehla-kadam.db
+        value: /tmp/pehla-kadam.db
+      - key: EPHEMERAL_STORAGE
+        value: "true"
+      - key: SEED_DEMO
+        value: "true"
       - key: CORS_ORIGINS
         value: "*"
-    disk:
-      name: data
-      mountPath: /data
-      sizeGB: 1

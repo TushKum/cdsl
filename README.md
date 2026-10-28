@@ -50,7 +50,7 @@ cd server
 npm install
 npm run seed     # optional: a demo facilitator, a demo group and 14 demo learners
 npm start        # http://localhost:3000 serves the website, the app and the API
-npm test         # 21 tests: price parity with the app, validation and the HTTP API
+npm test         # 24 tests: price parity with the app, validation, the HTTP API and a free-plan start
 ```
 
 `npm run seed` prints the demo logins: facilitator `demo.mentor@example.com` / `demo-mentor-2026` (change it with `DEMO_MENTOR_PASSWORD`), and every demo learner uses PIN `2026`. Demo users are flagged `is_demo` and the insights page says how many are included. Running the seed again replaces them.
@@ -60,6 +60,8 @@ npm test         # 21 tests: price parity with the app, validation and the HTTP 
 | `PORT` | `3000` | HTTP port |
 | `DB_FILE` | `server/data/pehla-kadam.db` | SQLite file (created on first start; migrations run automatically) |
 | `CORS_ORIGINS` | `*` | Comma-separated origins allowed to call the API. Auth uses bearer tokens, not cookies. |
+| `EPHEMERAL_STORAGE` | off | Set to `true` when the database does not survive restarts; the app and portals then warn people |
+| `SEED_DEMO` | off | Set to `true` to load the demo group on start whenever it is missing |
 
 ### How sync stays honest
 The app runs the simulation; the server checks it. Every `PUT /api/me/state` is replayed against the server's own copy of the price engine (`src/market.js`, kept identical to the app by `test/market.test.js`):
@@ -99,7 +101,23 @@ All bodies are JSON. Authenticated routes take `Authorization: Bearer <token>`.
 | `GET /api/cohorts` · `POST /api/cohorts` | mentor | List groups · create one `{name}` (returns a 6-letter join code) |
 | `GET /api/cohorts/:id` · `DELETE /api/cohorts/:id` | mentor (owner) | Group report (members, weak spots) · delete the group |
 
-### Deploy
-The repo root has a `Dockerfile` that serves everything from one container, and a `render.yaml` blueprint for [Render](https://render.com) with a 1 GB disk mounted at `/data` for the SQLite file (persistent disks need a paid instance). Any host that runs Docker and keeps `/data` works the same way.
+### Deploy to Render (free plan)
+`render.yaml` is set up for Render's free plan:
+1. On render.com choose **New → Blueprint**, connect GitHub and pick this repo (branch `main`).
+2. Render proposes one free web service, `pehla-kadam`, built from the root `Dockerfile`. Click **Apply**.
+3. When it is live, `https://<your-service>.onrender.com` serves the website, `/app/`, `/mentor/`, `/insights/` and the API.
 
-To use a deployed server from the GitHub Pages copy of the site, open the app or portal once with `?api=https://your-server` added to the address; it is remembered in that browser.
+What the free plan means:
+- **Data is temporary.** Free services have no disk, so the SQLite file lives in `/tmp` and is wiped whenever the service restarts, sleeps or redeploys. `EPHEMERAL_STORAGE=true` makes the app, the facilitator portal and the insights page say so. Learners never lose progress on their own phone: if the server was wiped, the app keeps the local copy and asks them to turn backup on again.
+- **Demo data reloads itself.** `SEED_DEMO=true` loads the demo facilitator (`demo.mentor@example.com` / `demo-mentor-2026`), the demo group and 14 demo learners on every start, so judges always see a populated portal and insights page.
+- **It sleeps after about 15 idle minutes.** The first visit after that takes up to a minute while Render wakes it. The app and portals show "Waking up the server" and keep retrying.
+
+| Setting | Free plan value | Meaning |
+|---|---|---|
+| `DB_FILE` | `/tmp/pehla-kadam.db` | Where SQLite writes |
+| `EPHEMERAL_STORAGE` | `true` | Tell people that server data is temporary |
+| `SEED_DEMO` | `true` | Load the demo group whenever it is missing |
+
+**For lasting data**, upgrade the service to a paid instance, add a disk mounted at `/data`, set `DB_FILE=/data/pehla-kadam.db`, and remove `EPHEMERAL_STORAGE` (and `SEED_DEMO` if you do not want demo users). Any other host that runs Docker works the same way.
+
+To use the server from the GitHub Pages copy of the site, open the app or a portal once with `?api=https://<your-service>.onrender.com` added to the address; it is remembered in that browser.

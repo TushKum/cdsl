@@ -429,6 +429,9 @@ en:{
   cl_e_many:'Too many tries. Wait a few minutes and try again.', cl_e_net:'Could not reach the server. Try again in a moment.',
   cl_e_invalid:'The server refused this progress because it does not add up. Reset the demo to start a clean copy.',
   w_login:'Already have a backup? Log in',
+  cl_waking:'Waking up the server. On the free plan this can take up to a minute…',
+  cl_eph:'This is a free demo server. Backups can be wiped when it restarts, but your progress on this phone is always kept.',
+  cl_lost:'The server was reset, so your backup is gone. Your progress on this phone is safe. Turn backup on again to save it.',
   pr_about:'About this prototype', pr_about_b:'Pehla Kadam is an educational prototype for CDSL Reimagine Ideathon 2026. No real money and no real accounts are involved. Prices come from a seeded random walk. Company names are used only to make learning familiar.',
   pr_cert:'View certificate',
 
@@ -673,6 +676,9 @@ hi:{
   cl_e_many:'बहुत ज़्यादा कोशिशें। कुछ मिनट रुककर फिर कोशिश करें।', cl_e_net:'सर्वर तक नहीं पहुँच सके। थोड़ी देर में फिर कोशिश करें।',
   cl_e_invalid:'सर्वर ने यह प्रगति नहीं ली क्योंकि इसका हिसाब नहीं मिलता। साफ़ कॉपी के लिए डेमो रीसेट करें।',
   w_login:'पहले से बैकअप है? लॉग इन करें',
+  cl_waking:'सर्वर जगाया जा रहा है। मुफ़्त प्लान पर इसमें एक मिनट तक लग सकता है…',
+  cl_eph:'यह मुफ़्त डेमो सर्वर है। इसके दोबारा शुरू होने पर बैकअप मिट सकते हैं, पर इस फ़ोन पर आपकी प्रगति हमेशा बनी रहती है।',
+  cl_lost:'सर्वर रीसेट हो गया, इसलिए आपका बैकअप मिट गया। इस फ़ोन पर आपकी प्रगति सुरक्षित है। उसे सेव करने के लिए बैकअप फिर से चालू करें।',
   pr_about:'इस प्रोटोटाइप के बारे में', pr_about_b:'पहला कदम, CDSL रीइमेजिन आइडियाथॉन 2026 के लिए एक शैक्षिक प्रोटोटाइप है। इसमें कोई असली पैसा या असली अकाउंट नहीं है। भाव एक सीडेड रैंडम वॉक से बनते हैं। कंपनियों के नाम सिर्फ़ सीखने को परिचित बनाने के लिए हैं।',
   pr_cert:'प्रमाणपत्र देखें',
 
@@ -939,7 +945,7 @@ function nextDay(){
 
 /* ---------------- Modal queue ---------------- */
 function openModal(m){ if(QUIET) return; if(ui.modal) ui.queue.push(m); else ui.modal = m; renderModal(); }
-function closeModal(){ ui.modal = ui.queue.shift() || null; renderModal(); }
+function closeModal(){ ui.modal = ui.queue.shift() || null; if(!ui.modal && cloudStale){ cloudStale = false; render(); } else renderModal(); }
 
 /* ---------------- Small render helpers ---------------- */
 function sakhi(text, lid){
@@ -1817,7 +1823,7 @@ window.addEventListener('hashchange', route);
    answers /api/health, a learner can back up with mobile + PIN; every save is then
    pushed with the last revision seen, and the server refuses stale or invalid copies. */
 const CLOUD_KEY = 'pehlaKadam.cloud';
-const C = {base:null, override:null, status:'checking', token:null, user:null, mob:'', rev:0, last:null, cohort:null, dirty:false, busy:false};
+const C = {base:null, override:null, ephemeral:false, lost:false, tries:0, status:'checking', token:null, user:null, mob:'', rev:0, last:null, cohort:null, dirty:false, busy:false};
 (function(){ try{ const o = JSON.parse(localStorage.getItem(CLOUD_KEY) || 'null'); if(o) Object.assign(C, {token:o.token||null, user:o.user||null, mob:o.mob||'', rev:o.rev||0, last:o.last||null, dirty:!!o.dirty, override:o.override||null}); }catch(e){} })();
 function cloudSave(){ try{ localStorage.setItem(CLOUD_KEY, JSON.stringify({token:C.token, user:C.user, mob:C.mob, rev:C.rev, last:C.last, dirty:C.dirty, override:C.override})); }catch(e){} }
 function apiBase(){
@@ -1826,8 +1832,8 @@ function apiBase(){
   if(C.override) return C.override;
   return /^https?:$/.test(location.protocol) ? location.origin : null;
 }
-async function api(method, path, body){
-  const ctl = typeof AbortController!=='undefined' ? new AbortController() : null, timer = ctl && setTimeout(()=>ctl.abort(), 8000);
+async function api(method, path, body, wait){
+  const ctl = typeof AbortController!=='undefined' ? new AbortController() : null, timer = ctl && setTimeout(()=>ctl.abort(), wait || 8000);
   try{
     const res = await fetch(C.base + path, {method, signal: ctl && ctl.signal,
       headers: Object.assign({'Content-Type':'application/json'}, C.token ? {Authorization:'Bearer '+C.token} : {}),
@@ -1847,7 +1853,8 @@ function cloudErr(st, data){
   if(code==='no_cohort') return t('cl_e_code');
   return (data && data.message) || t('cl_e_net');
 }
-function cloudRerender(){ if(QUIET) return; if(!ui.modal && (ui.page==='dash' || ui.view==='profile' || ui.tab==='profile' || S.onb===0)) render(); }
+let cloudStale = false;  // backup status changed while a popup was open: redraw when it closes
+function cloudRerender(){ if(QUIET) return; if(ui.page==='dash' || ui.view==='profile' || ui.tab==='profile' || S.onb===0){ if(ui.modal) cloudStale = true; else render(); } }
 function adopt(state, rev, msgKey){
   S = Object.assign(fresh(state.lang), state); C.rev = rev; C.dirty = false; C.last = Date.now(); cloudSave();
   try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){}
@@ -1868,7 +1875,8 @@ async function cloudPush(){
   C.busy = false;
   if(r.status===200){ C.rev = r.data.rev; C.last = Date.now(); C.dirty = JSON.stringify(S)!==sent; C.status = 'ready'; cloudSave(); if(C.dirty) cloudDirty(); }
   else if(r.status===409 && r.data && r.data.state){ adopt(r.data.state, r.data.rev, 'cl_newer'); C.status = 'ready'; }
-  else if(r.status===401){ cloudForget(); }
+  else if(r.status===409){ C.rev = r.data ? r.data.rev || 0 : 0; C.status = 'ready'; cloudSave(); cloudDirty(); }  // server lost the copy: start again from its revision
+  else if(r.status===401){ cloudForget(); C.lost = true; C.status = 'ready'; }
   else { C.status = r.status===0 ? 'offline' : 'error'; C.err = cloudErr(r.status, r.data); }
   cloudRerender();
 }
@@ -1876,12 +1884,17 @@ function cloudForget(){ C.token = null; C.user = null; C.rev = 0; C.dirty = fals
 async function cloudInit(){
   C.base = apiBase();
   if(!C.base){ C.status = 'off'; return; }
-  const h = await api('GET', '/api/health');
-  if(h.status!==200 || !h.data || h.data.service!=='pehla-kadam'){ C.status = C.token ? 'offline' : 'off'; cloudRerender(); return; }
-  C.status = 'ready';
+  const h = await api('GET', '/api/health', undefined, 20000);
+  if(h.status!==200 || !h.data || h.data.service!=='pehla-kadam'){
+    // No answer or a 502/503 usually means a free-plan server is still waking up: keep trying for about two minutes.
+    // Any other answer means this host has no Pehla Kadam server, so backup stays off.
+    if((h.status===0 || h.status===502 || h.status===503) && C.tries < 6){ C.tries++; C.status = 'waking'; cloudRerender(); setTimeout(cloudInit, 5000*C.tries); return; }
+    C.status = C.token ? 'offline' : 'off'; cloudRerender(); return;
+  }
+  C.status = 'ready'; C.tries = 0; C.ephemeral = !!h.data.ephemeral;
   if(C.token){
     const me = await api('GET', '/api/me');
-    if(me.status===401){ cloudForget(); }
+    if(me.status===401){ cloudForget(); C.lost = true; }
     else if(me.status===200){
       C.cohort = me.data.cohort; C.user = me.data.user;
       const srv = me.data.snapshot ? me.data.snapshot.rev : 0;
@@ -1895,16 +1908,17 @@ window.addEventListener('online', ()=>{ if(C.token && C.dirty) cloudPush(); else
 function cloudTime(ts){ try{ return new Date(ts).toLocaleTimeString(loc(), {hour:'2-digit', minute:'2-digit'}); }catch(e){ return ''; } }
 function cloudCard(){
   if(C.status==='off') return `<div class="card"><h3>☁️ ${t('cl_title')}</h3><p class="mut">${t('cl_off')}</p></div>`;
-  if(C.status==='checking' && !C.token) return `<div class="card"><h3>☁️ ${t('cl_title')}</h3><p class="mut">${t('cl_checking')}</p></div>`;
-  if(!C.token) return `<div class="card"><h3>☁️ ${t('cl_title')}</h3><p class="mut">${t('cl_sub')}</p>
+  if((C.status==='checking' || C.status==='waking') && !C.token) return `<div class="card"><h3>☁️ ${t('cl_title')}</h3><p class="mut">${t(C.status==='waking'?'cl_waking':'cl_checking')}</p></div>`;
+  const eph = C.ephemeral ? `<p class="hint">⚠️ ${t('cl_eph')}</p>` : '';
+  if(!C.token) return `<div class="card"><h3>☁️ ${t('cl_title')}</h3>${C.lost?`<div class="fb no" style="margin-bottom:8px">${t('cl_lost')}</div>`:''}<p class="mut">${t('cl_sub')}</p>${eph}
       <label class="f" for="cl_newpin">${t('cl_pin')}</label><input class="inp" id="cl_newpin" type="password" inputmode="numeric" maxlength="6" autocomplete="new-password">
       <div class="hint">${t('cl_pin_h',{mob:esc(S.kyc.mob)})}</div><div class="err" id="cl_err"></div>
       <button class="btn block" data-a="cl_register">${t('cl_on')}</button>
       <p style="margin-top:10px"><small class="mut">${t('cl_have')}</small> <button class="link" data-a="cl_login_open">${t('cl_login')}</button></p></div>`;
-  const st = C.status==='syncing' ? t('cl_syncing') : C.status==='offline' ? t('cl_offline') : C.status==='error' ? C.err : C.dirty ? t('cl_pending') : C.last ? t('cl_synced',{time:cloudTime(C.last)}) : '';
+  const st = C.status==='waking' ? t('cl_waking') : C.status==='syncing' ? t('cl_syncing') : C.status==='offline' ? t('cl_offline') : C.status==='error' ? C.err : C.dirty ? t('cl_pending') : C.last ? t('cl_synced',{time:cloudTime(C.last)}) : '';
   const ok = C.status==='ready' && !C.dirty;
   return `<div class="card"><div class="between"><h3>☁️ ${t('cl_title')}</h3><span class="chip ${ok?'g':C.status==='error'?'r':''}">${ok?'✓':'…'}</span></div>
-      <p class="mut">${t('cl_as',{name:esc(C.user?C.user.name:''), mob:esc(C.mob)})}</p><p><b>${esc(st)}</b></p>
+      <p class="mut">${t('cl_as',{name:esc(C.user?C.user.name:''), mob:esc(C.mob)})}</p><p><b>${esc(st)}</b></p>${eph}
       <div class="btns"><button class="btn sec" data-a="cl_push">${t('cl_now')}</button><button class="btn ghost" data-a="cl_logout">${t('cl_out')}</button></div>
       <h3 style="margin-top:16px">👥 ${t('cl_group')}</h3>
       ${C.cohort?`<p>${t('cl_in_group',{name:esc(C.cohort.name), mentor:esc(C.cohort.mentor)})}</p><button class="link" data-a="cl_leave">${t('cl_leave')}</button>`
@@ -1915,7 +1929,7 @@ function cloudCard(){
 async function cloudLogin(mob, pin){
   const r = await api('POST', '/api/learners/login', {mobile: mob, pin});
   if(r.status!==200) return cloudErr(r.status, r.data);
-  C.token = r.data.token; C.user = r.data.user; C.mob = mob; C.rev = 0; C.dirty = false; cloudSave();
+  C.token = r.data.token; C.user = r.data.user; C.mob = mob; C.rev = 0; C.dirty = false; C.lost = false; cloudSave();
   const me = await api('GET', '/api/me'); if(me.status===200) C.cohort = me.data.cohort;
   const g = await api('GET', '/api/me/state');
   if(g.status===200) adopt(g.data.state, g.data.rev, 'cl_restored');
@@ -2121,7 +2135,7 @@ const ACT = {
     if(!/^\d{4,6}$/.test(pin)) return setErr('cl_err', t('cl_e_pin'));
     const r = await api('POST', '/api/learners/register', {name: S.kyc.name, mobile: S.kyc.mob, pin});
     if(r.status!==201) return setErr('cl_err', cloudErr(r.status, r.data));
-    C.token = r.data.token; C.user = r.data.user; C.mob = S.kyc.mob; C.rev = 0; cloudSave();
+    C.token = r.data.token; C.user = r.data.user; C.mob = S.kyc.mob; C.rev = 0; C.lost = false; cloudSave();
     toast(t('cl_turned_on')); C.dirty = true; await cloudPush();
   },
   cl_login_open(){ openModal({type:'cl_login'}); },

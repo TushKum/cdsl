@@ -2,6 +2,8 @@
 
 A learn-by-doing investing sandbox for first-time investors, built for the CDSL Reimagine Ideathon 2026.
 
+**Live demo:** https://cdsl-qnzc.onrender.com/ (Render free plan: the first visit after about 15 idle minutes takes up to a minute while it wakes up, and server data resets on restart).
+
 | Path | What it is |
 |---|---|
 | `index.html` | Landing page (Hindi/English) with real screenshots in `assets/` |

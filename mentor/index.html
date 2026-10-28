@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Pehla Kadam Facilitator</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="theme-color" content="#0f766e">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Mukta:wght@400;500;700&family=IBM+Plex+Mono:wght@500;600&display=swap">
+<link rel="stylesheet" href="../assets/portal.css">
+</head>
+<body>
+<header class="bar"><div class="wrap">
+  <a class="mark" href="../index.html"><b data-i="brand">Pehla Kadam</b><span data-i="sub">Facilitator</span></a>
+  <button class="lang" id="lang" type="button" aria-label="Switch language">हिंदी</button>
+  <button class="btn ghost" id="logout" type="button" hidden style="color:var(--hero-ink);border-color:var(--hero-muted)" data-i="logout">Log out</button>
+</div></header>
+
+<main class="wrap">
+  <div>
+    <div class="eyebrow" data-i="eye">For SHG leaders, NGO trainers and teachers</div>
+    <h1 data-i="h1">Follow your learners’ first steps</h1>
+    <p class="lede" data-i="lede">Create a group, give learners its 6-letter code, and see who has opened an account, who is stuck, and which scams still fool them.</p>
+  </div>
+
+  <div class="note" id="noserver" hidden data-i="noserver">This page needs the Pehla Kadam server. Run it with <code>npm start</code> in the <code>server</code> folder and open this page from it, or add <code>?api=https://your-server</code> to the address.</div>
+
+  <!-- Logged out -->
+  <section class="grid" id="auth" hidden>
+    <div class="card s6">
+      <div class="tabs" role="group"><button type="button" id="t-login" aria-pressed="true" data-i="tlogin">Log in</button><button type="button" id="t-reg" aria-pressed="false" data-i="treg">Create account</button></div>
+      <form id="f-auth" novalidate>
+        <div id="f-name" hidden><label for="m-name" data-i="name">Your name</label><input id="m-name" autocomplete="name"></div>
+        <label for="m-email" data-i="email">Email</label><input id="m-email" type="email" autocomplete="email">
+        <label for="m-pw" data-i="pw">Password</label><input id="m-pw" type="password" autocomplete="current-password">
+        <div class="err" id="a-err" role="alert"></div>
+        <div class="row"><button class="btn" type="submit" id="a-go" data-i="go_login">Log in</button><button class="btn ghost" type="button" id="demo" data-i="demo">Use the demo facilitator</button></div>
+      </form>
+    </div>
+    <div class="card s6">
+      <h2 data-i="how_h">How it works</h2>
+      <ol style="padding-left:20px;margin:12px 0 0;display:flex;flex-direction:column;gap:8px">
+        <li data-i="how1">Create a group for each batch you teach.</li>
+        <li data-i="how2">Learners open the app, go to <b>Profile → Cloud backup</b>, turn on backup and enter the group code.</li>
+        <li data-i="how3">Their progress appears here as they practise. You see names and progress only: never PINs, PAN or Aadhaar.</li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- Logged in -->
+  <section class="grid" id="home" hidden style="align-items:start">
+    <div class="card s4">
+      <h2 data-i="groups">Your groups</h2>
+      <div class="list" id="glist"></div>
+      <form id="f-new" novalidate style="margin-top:14px">
+        <label for="g-name" data-i="newg">New group name</label>
+        <div class="row" style="flex-wrap:nowrap"><input id="g-name" maxlength="80" data-ph="newg_ph"><button class="btn" type="submit" data-i="create">Create</button></div>
+        <div class="err" id="g-err" role="alert"></div>
+      </form>
+    </div>
+    <div class="s8" id="report" style="display:flex;flex-direction:column;gap:16px;min-width:0"></div>
+  </section>
+
+  <footer data-i="foot">Learner data comes from the Pehla Kadam practice app. All money and prices are simulated.</footer>
+</main>
+
+<script src="../assets/portal.js"></script>
+<script>
+(function(){
+  'use strict';
+  var P = window.PK;
+  P.i18n({
+    en: { brand:'Pehla Kadam', sub:'Facilitator', logout:'Log out', eye:'For SHG leaders, NGO trainers and teachers', h1:'Follow your learners’ first steps',
+      lede:'Create a group, give learners its 6-letter code, and see who has opened an account, who is stuck, and which scams still fool them.',
+      noserver:document.getElementById('noserver').innerHTML,
+      tlogin:'Log in', treg:'Create account', name:'Your name', email:'Email', pw:'Password', go_login:'Log in', go_reg:'Create account', demo:'Use the demo facilitator',
+      how_h:'How it works', how1:'Create a group for each batch you teach.', how2:'Learners open the app, go to <b>Profile → Cloud backup</b>, turn on backup and enter the group code.',
+      how3:'Their progress appears here as they practise. You see names and progress only: never PINs, PAN or Aadhaar.',
+      groups:'Your groups', newg:'New group name', newg_ph:'e.g. Nashik SHG, March batch', create:'Create', foot:'Learner data comes from the Pehla Kadam practice app. All money and prices are simulated.',
+      members:'{n} learners', none:'No groups yet. Create your first one below.', pick:'Choose a group to see its report.',
+      code_h:'Group code', code_b:'Learners enter this in the app under Profile → Cloud backup → Learning group.',
+      k_n:'Learners', k_steps:'Average steps done', k_nom:'Added a nominee', k_scam:'Scam answers right',
+      t_h:'Learners', c_name:'Name', c_day:'Day', c_worth:'Worth', c_ret:'Return', c_vs:'vs market', c_steps:'Steps', c_less:'Lessons', c_scam:'Scam Shield', c_nom:'Nominee', c_sync:'Last sync',
+      t_empty:'Nobody has joined yet. Share the code above.', not_started:'Not started',
+      w_ms:'Where learners stop', w_ms_b:'Share of the group that has done each step. Amber bars are below half: a good topic for your next session.',
+      w_ls:'Least-read lessons', w_sc:'Scam messages', w_sc_b:'How often learners judged each message correctly.', right:'{a} of {b} right',
+      del:'Delete group', del_q:'Delete “{name}”? Learners keep their own progress; they just leave the group.', del_yes:'Yes, delete', cancel:'Cancel',
+      e_net:'Could not reach the server. Try again.', e_name:'Enter a name for the group.', e_email:'Enter a valid email address.', e_pw:'Password must be at least 8 characters.', e_need:'Enter your name.',
+      yes:'Yes', no:'No', demo_note:'Demo data' },
+    hi: { brand:'पहला कदम', sub:'फ़ैसिलिटेटर', logout:'लॉग आउट', eye:'SHG लीडर, NGO ट्रेनर और शिक्षकों के लिए', h1:'अपने सीखने वालों के पहले कदमों पर नज़र रखें',
+      lede:'एक ग्रुप बनाइए, सीखने वालों को उसका 6 अक्षरों का कोड दीजिए, और देखिए किसने अकाउंट खोला, कौन अटका है, और कौन-से धोखे अब भी उन्हें फँसाते हैं।',
+      noserver:'इस पेज को पहला कदम सर्वर चाहिए। <code>server</code> फ़ोल्डर में <code>npm start</code> चलाकर यह पेज वहीं से खोलें, या पते में <code>?api=https://your-server</code> जोड़ें।',
+      tlogin:'लॉग इन', treg:'अकाउंट बनाएँ', name:'आपका नाम', email:'ईमेल', pw:'पासवर्ड', go_login:'लॉग इन', go_reg:'अकाउंट बनाएँ', demo:'डेमो फ़ैसिलिटेटर से देखें',
+      how_h:'यह कैसे काम करता है', how1:'आप जिस भी बैच को पढ़ाते हैं, उसके लिए एक ग्रुप बनाएँ।', how2:'सीखने वाले ऐप में <b>प्रोफ़ाइल → क्लाउड बैकअप</b> पर जाकर बैकअप चालू करें और ग्रुप कोड डालें।',
+      how3:'अभ्यास करते-करते उनकी प्रगति यहाँ दिखती है। आपको सिर्फ़ नाम और प्रगति दिखती है: PIN, PAN या आधार कभी नहीं।',
+      groups:'आपके ग्रुप', newg:'नए ग्रुप का नाम', newg_ph:'जैसे नासिक SHG, मार्च बैच', create:'बनाएँ', foot:'सीखने वालों का डेटा पहला कदम अभ्यास ऐप से आता है। सारा पैसा और सारे भाव सिम्युलेटेड हैं।',
+      members:'{n} सीखने वाले', none:'अभी कोई ग्रुप नहीं। नीचे अपना पहला ग्रुप बनाएँ।', pick:'रिपोर्ट देखने के लिए कोई ग्रुप चुनें।',
+      code_h:'ग्रुप कोड', code_b:'सीखने वाले इसे ऐप में प्रोफ़ाइल → क्लाउड बैकअप → सीखने का ग्रुप में डालते हैं।',
+      k_n:'सीखने वाले', k_steps:'औसत पूरे कदम', k_nom:'नॉमिनी जोड़ा', k_scam:'स्कैम के सही जवाब',
+      t_h:'सीखने वाले', c_name:'नाम', c_day:'दिन', c_worth:'संपत्ति', c_ret:'रिटर्न', c_vs:'बाज़ार से', c_steps:'कदम', c_less:'पाठ', c_scam:'स्कैम शील्ड', c_nom:'नॉमिनी', c_sync:'आख़िरी सिंक',
+      t_empty:'अभी कोई नहीं जुड़ा। ऊपर का कोड साझा करें।', not_started:'शुरू नहीं किया',
+      w_ms:'सीखने वाले कहाँ रुकते हैं', w_ms_b:'ग्रुप के कितने लोगों ने हर कदम पूरा किया। पीली पट्टियाँ आधे से कम हैं: अगले सत्र के लिए अच्छा विषय।',
+      w_ls:'सबसे कम पढ़े गए पाठ', w_sc:'स्कैम संदेश', w_sc_b:'हर संदेश को सीखने वालों ने कितनी बार सही पहचाना।', right:'{b} में से {a} सही',
+      del:'ग्रुप हटाएँ', del_q:'"{name}" हटाएँ? सीखने वालों की अपनी प्रगति बनी रहेगी; वे बस ग्रुप से निकल जाएँगे।', del_yes:'हाँ, हटाएँ', cancel:'रद्द करें',
+      e_net:'सर्वर तक नहीं पहुँच सके। फिर कोशिश करें।', e_name:'ग्रुप का नाम लिखें।', e_email:'सही ईमेल पता लिखें।', e_pw:'पासवर्ड कम से कम 8 अक्षरों का हो।', e_need:'अपना नाम लिखें।',
+      yes:'हाँ', no:'नहीं', demo_note:'डेमो डेटा' }
+  });
+
+  var TK = 'pk.mentor.token', token = null, mode = 'login', groups = [], current = null, report = null, confirmDel = false;
+  try{ token = localStorage.getItem(TK); }catch(e){}
+  var $ = function(id){ return document.getElementById(id); };
+  function setToken(t){ token = t; try{ t ? localStorage.setItem(TK, t) : localStorage.removeItem(TK); }catch(e){} }
+  function show(id, on){ $(id).hidden = !on; }
+  function errMsg(r){ return r.status === 0 ? P.t('e_net') : (r.data && r.data.message) || P.t('e_net'); }
+
+  function setMode(m){
+    mode = m;
+    $('t-login').setAttribute('aria-pressed', m === 'login'); $('t-reg').setAttribute('aria-pressed', m === 'reg');
+    show('f-name', m === 'reg'); $('a-go').textContent = P.t(m === 'reg' ? 'go_reg' : 'go_login');
+    $('m-pw').setAttribute('autocomplete', m === 'reg' ? 'new-password' : 'current-password'); $('a-err').textContent = '';
+  }
+  $('t-login').onclick = function(){ setMode('login'); };
+  $('t-reg').onclick = function(){ setMode('reg'); };
+  $('demo').onclick = function(){ setMode('login'); $('m-email').value = 'demo.mentor@example.com'; $('m-pw').value = 'demo-mentor-2026'; $('f-auth').requestSubmit(); };
+  $('f-auth').onsubmit = function(e){
+    e.preventDefault();
+    var email = $('m-email').value.trim(), pw = $('m-pw').value, name = $('m-name').value.trim();
+    if(mode === 'reg' && !name) return void ($('a-err').textContent = P.t('e_need'));
+    if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return void ($('a-err').textContent = P.t('e_email'));
+    if(mode === 'reg' && pw.length < 8) return void ($('a-err').textContent = P.t('e_pw'));
+    $('a-go').disabled = true;
+    P.api('POST', mode === 'reg' ? '/api/mentors/register' : '/api/mentors/login', mode === 'reg' ? {name:name, email:email, password:pw} : {email:email, password:pw}).then(function(r){
+      $('a-go').disabled = false;
+      if(r.status !== 200 && r.status !== 201) return void ($('a-err').textContent = errMsg(r));
+      setToken(r.data.token); $('m-pw').value = ''; boot();
+    });
+  };
+  $('logout').onclick = function(){ P.api('POST', '/api/logout', undefined, token); setToken(null); current = null; report = null; boot(); };
+  $('f-new').onsubmit = function(e){
+    e.preventDefault();
+    var name = $('g-name').value.trim();
+    if(!name) return void ($('g-err').textContent = P.t('e_name'));
+    P.api('POST', '/api/cohorts', {name:name}, token).then(function(r){
+      if(r.status !== 201) return void ($('g-err').textContent = errMsg(r));
+      $('g-name').value = ''; $('g-err').textContent = ''; current = r.data.cohort.id; loadGroups();
+    });
+  };
+
+  function renderGroups(){
+    $('g-name').placeholder = P.t('newg_ph');
+    $('glist').innerHTML = groups.length ? groups.map(function(g){
+      return '<button type="button" class="grp" data-id="' + g.id + '" aria-current="' + (g.id === current) + '"><span><b>' + P.esc(g.name) + '</b><br><small class="mut">' + P.t('members', {n:g.members}) + '</small></span><span class="chip">' + g.join_code + '</span></button>';
+    }).join('') : '<p class="empty">' + P.t('none') + '</p>';
+    $('glist').querySelectorAll('.grp').forEach(function(b){ b.onclick = function(){ current = Number(b.dataset.id); confirmDel = false; renderGroups(); loadReport(); }; });
+  }
+  function loadGroups(){
+    return P.api('GET', '/api/cohorts', undefined, token).then(function(r){
+      if(r.status === 401){ setToken(null); return boot(); }
+      groups = (r.data && r.data.cohorts) || [];
+      if(!current && groups.length) current = groups[0].id;
+      renderGroups(); loadReport();
+    });
+  }
+  function loadReport(){
+    if(!current){ report = null; return renderReport(); }
+    P.api('GET', '/api/cohorts/' + current, undefined, token).then(function(r){ report = r.status === 200 ? r.data : null; renderReport(); });
+  }
+  function renderReport(){
+    var el = $('report');
+    if(!report){ el.innerHTML = '<div class="card"><p class="empty">' + P.t('pick') + '</p></div>'; return; }
+    var L = P.L(), m = report.members, w = report.weak_spots, started = m.filter(function(x){ return x.sim_day != null; });
+    var avg = function(a, f){ return a.length ? a.reduce(function(s, x){ return s + f(x); }, 0)/a.length : 0; };
+    var scamAns = m.reduce(function(s, x){ return s + x.scam_answered; }, 0), scamOk = m.reduce(function(s, x){ return s + x.scam_correct; }, 0);
+    var demo = m.some(function(x){ return x.is_demo; });
+    var h = '';
+    h += '<div class="card"><div class="row" style="justify-content:space-between"><div><h2>' + P.esc(report.cohort.name) + (demo ? ' <span class="chip warn">' + P.t('demo_note') + '</span>' : '') + '</h2>' +
+      '<p class="mut" style="margin-top:6px">' + P.t('code_b') + '</p></div><div><small class="mut">' + P.t('code_h') + '</small><br><span class="code">' + report.cohort.join_code + '</span></div></div></div>';
+    h += '<div class="grid">' +
+      '<div class="card kpi s3"><small>' + P.t('k_n') + '</small><b>' + m.length + '</b></div>' +
+      '<div class="card kpi s3"><small>' + P.t('k_steps') + '</small><b>' + avg(started, function(x){ return x.steps; }).toFixed(1) + '</b><span>/ 10</span></div>' +
+      '<div class="card kpi s3"><small>' + P.t('k_nom') + '</small><b>' + (started.length ? Math.round(m.filter(function(x){ return x.has_nominee; }).length/started.length*100) : 0) + '%</b></div>' +
+      '<div class="card kpi s3"><small>' + P.t('k_scam') + '</small><b>' + (scamAns ? Math.round(scamOk/scamAns*100) : 0) + '%</b></div></div>';
+    h += '<div class="card"><h2>' + P.t('t_h') + '</h2>';
+    if(!m.length) h += '<p class="empty">' + P.t('t_empty') + '</p>';
+    else h += '<div class="tbl"><table><thead><tr><th>' + [P.t('c_name'), P.t('c_day'), P.t('c_worth'), P.t('c_ret'), P.t('c_vs'), P.t('c_steps'), P.t('c_less'), P.t('c_scam'), P.t('c_nom'), P.t('c_sync')].join('</th><th>') + '</th></tr></thead><tbody>' +
+      m.map(function(x){
+        if(x.sim_day == null) return '<tr><td><b>' + P.esc(x.name) + '</b></td><td colspan="9" class="mut" style="text-align:left">' + P.t('not_started') + '</td></tr>';
+        var gap = x.return_pct - x.market_pct;
+        return '<tr><td><b>' + P.esc(x.name) + '</b> <small class="mut">' + (x.lang === 'hi' ? 'हि' : 'EN') + '</small></td><td>' + (x.sim_day + 1) + '</td><td>' + P.money(x.net_worth) + '</td>' +
+          '<td class="' + (x.return_pct >= 0 ? 'up' : 'dn') + '">' + P.pct(x.return_pct) + '</td><td class="' + (gap >= 0 ? 'up' : 'dn') + '">' + P.pct(gap) + '</td>' +
+          '<td><span class="mini"><i style="width:' + x.steps*10 + '%"></i></span>' + x.steps + '</td><td>' + x.lessons + '</td>' +
+          '<td>' + (x.scam_answered ? x.scam_correct + ' / ' + x.scam_answered : '–') + '</td>' +
+          '<td>' + (x.has_nominee ? '<span class="chip good">' + P.t('yes') + '</span>' : '<span class="chip bad">' + P.t('no') + '</span>') + '</td>' +
+          '<td class="mut">' + (x.last_sync ? new Date(x.last_sync).toLocaleDateString(P.lang === 'hi' ? 'hi-IN' : 'en-IN', {day:'numeric', month:'short'}) : '–') + '</td></tr>';
+      }).join('') + '</tbody></table></div>';
+    h += '</div>';
+    h += '<div class="grid"><div class="card s6"><h2>' + P.t('w_ms') + '</h2><p class="mut" style="margin-top:6px;font-size:.92rem">' + P.t('w_ms_b') + '</p><div class="bars">' +
+      w.milestones.map(function(x){ return P.bar(L.ms[x.key], x.pct + '%', x.pct, x.pct < 50); }).join('') + '</div></div>' +
+      '<div class="card s6"><h2>' + P.t('w_sc') + '</h2><p class="mut" style="margin-top:6px;font-size:.92rem">' + P.t('w_sc_b') + '</p><div class="bars">' +
+      w.scam.map(function(x){ return P.bar(L.scam[x.message_index] + ' <small class="mut">(' + L.ans[x.correct_answer] + ')</small>', x.answered ? P.t('right', {a:x.correct, b:x.answered}) : '–', x.accuracy_pct, x.answered && x.accuracy_pct < 50); }).join('') + '</div>' +
+      '<h2 style="margin-top:20px">' + P.t('w_ls') + '</h2><div class="bars">' +
+      w.lessons.slice(0, 5).map(function(x){ return P.bar(L.lesson[x.key], x.pct + '%', x.pct, x.pct < 50); }).join('') + '</div></div></div>';
+    h += '<div class="row">' + (confirmDel
+      ? '<span>' + P.t('del_q', {name:P.esc(report.cohort.name)}) + '</span><button class="btn danger" type="button" id="del-yes">' + P.t('del_yes') + '</button><button class="btn ghost" type="button" id="del-no">' + P.t('cancel') + '</button>'
+      : '<button class="btn ghost" type="button" id="del">' + P.t('del') + '</button>') + '</div>';
+    el.innerHTML = h;
+    if($('del')) $('del').onclick = function(){ confirmDel = true; renderReport(); };
+    if($('del-no')) $('del-no').onclick = function(){ confirmDel = false; renderReport(); };
+    if($('del-yes')) $('del-yes').onclick = function(){
+      P.api('DELETE', '/api/cohorts/' + current, undefined, token).then(function(){ current = null; confirmDel = false; loadGroups(); });
+    };
+  }
+
+  function boot(){
+    P.health().then(function(ok){
+      show('noserver', !ok); show('auth', ok && !token); show('home', ok && !!token); show('logout', ok && !!token);
+      if(ok && token) loadGroups();
+      if(ok && !token) setMode(mode);
+    });
+  }
+  P.onLang(function(){ setMode(mode); if(token){ renderGroups(); renderReport(); } });
+  boot();
+})();
+</script>
+</body>
+</html>

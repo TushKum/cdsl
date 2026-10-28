@@ -1,0 +1,17 @@
+# Render blueprint: one web service with a persistent disk for the SQLite file.
+# Persistent disks need a paid instance type on Render.
+services:
+  - type: web
+    name: pehla-kadam
+    runtime: docker
+    plan: starter
+    healthCheckPath: /api/health
+    envVars:
+      - key: DB_FILE
+        value: /data/pehla-kadam.db
+      - key: CORS_ORIGINS
+        value: "*"
+    disk:
+      name: data
+      mountPath: /data
+      sizeGB: 1

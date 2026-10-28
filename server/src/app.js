@@ -18,6 +18,7 @@ function createApp(db, opts = {}){
   const root = opts.staticRoot === undefined ? path.join(__dirname, '..', '..') : opts.staticRoot;
   const origins = (opts.corsOrigins || process.env.CORS_ORIGINS || '*').split(',').map(s => s.trim()).filter(Boolean);
   const loginLimit = A.rateLimiter({ windowMs: 15*60*1000, max: opts.loginMax || 20 });
+  const ephemeral = !!opts.ephemeral;
   let statsCache = null;
 
   app.disable('x-powered-by');
@@ -61,7 +62,7 @@ function createApp(db, opts = {}){
   /* ---------- Public ---------- */
   app.get('/api/health', (req, res) => {
     const v = db.prepare('SELECT max(version) AS v FROM schema_migrations').get().v;
-    res.json({ ok: true, service: 'pehla-kadam', schema_version: v });
+    res.json({ ok: true, service: 'pehla-kadam', schema_version: v, ephemeral });
   });
 
   app.get('/api/market', (req, res) => {
@@ -74,7 +75,7 @@ function createApp(db, opts = {}){
   });
 
   app.get('/api/stats', (req, res) => {
-    if(!statsCache || Date.now() - statsCache.at > 30000) statsCache = { at: Date.now(), body: S.publicStats(db) };
+    if(!statsCache || Date.now() - statsCache.at > 30000) statsCache = { at: Date.now(), body: { ...S.publicStats(db), ephemeral } };
     res.json(statsCache.body);
   });
 

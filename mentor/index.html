@@ -25,6 +25,8 @@
     <p class="lede" data-i="lede">Create a group, give learners its 6-letter code, and see who has opened an account, who is stuck, and which scams still fool them.</p>
   </div>
 
+  <div class="note" id="waking" hidden data-i="waking">Waking up the server. On the free plan the first visit can take up to a minute…</div>
+  <div class="note" id="eph" hidden data-i="eph">Free demo server: groups and accounts are wiped whenever it restarts or sleeps. Use it to try Pehla Kadam, not to run a real batch.</div>
   <div class="note" id="noserver" hidden data-i="noserver">This page needs the Pehla Kadam server. Run it with <code>npm start</code> in the <code>server</code> folder and open this page from it, or add <code>?api=https://your-server</code> to the address.</div>
 
   <!-- Logged out -->
@@ -72,7 +74,7 @@
   'use strict';
   var P = window.PK;
   P.i18n({
-    en: { brand:'Pehla Kadam', sub:'Facilitator', logout:'Log out', eye:'For SHG leaders, NGO trainers and teachers', h1:'Follow your learners’ first steps',
+    en: { waking:'Waking up the server. On the free plan the first visit can take up to a minute…', eph:'Free demo server: groups and accounts are wiped whenever it restarts or sleeps. Use it to try Pehla Kadam, not to run a real batch.', brand:'Pehla Kadam', sub:'Facilitator', logout:'Log out', eye:'For SHG leaders, NGO trainers and teachers', h1:'Follow your learners’ first steps',
       lede:'Create a group, give learners its 6-letter code, and see who has opened an account, who is stuck, and which scams still fool them.',
       noserver:document.getElementById('noserver').innerHTML,
       tlogin:'Log in', treg:'Create account', name:'Your name', email:'Email', pw:'Password', go_login:'Log in', go_reg:'Create account', demo:'Use the demo facilitator',
@@ -89,7 +91,7 @@
       del:'Delete group', del_q:'Delete “{name}”? Learners keep their own progress; they just leave the group.', del_yes:'Yes, delete', cancel:'Cancel',
       e_net:'Could not reach the server. Try again.', e_name:'Enter a name for the group.', e_email:'Enter a valid email address.', e_pw:'Password must be at least 8 characters.', e_need:'Enter your name.',
       yes:'Yes', no:'No', demo_note:'Demo data' },
-    hi: { brand:'पहला कदम', sub:'फ़ैसिलिटेटर', logout:'लॉग आउट', eye:'SHG लीडर, NGO ट्रेनर और शिक्षकों के लिए', h1:'अपने सीखने वालों के पहले कदमों पर नज़र रखें',
+    hi: { waking:'सर्वर जगाया जा रहा है। मुफ़्त प्लान पर पहली बार में एक मिनट तक लग सकता है…', eph:'मुफ़्त डेमो सर्वर: इसके दोबारा शुरू होने या सोने पर ग्रुप और अकाउंट मिट जाते हैं। इसे पहला कदम आज़माने के लिए इस्तेमाल करें, असली बैच चलाने के लिए नहीं।', brand:'पहला कदम', sub:'फ़ैसिलिटेटर', logout:'लॉग आउट', eye:'SHG लीडर, NGO ट्रेनर और शिक्षकों के लिए', h1:'अपने सीखने वालों के पहले कदमों पर नज़र रखें',
       lede:'एक ग्रुप बनाइए, सीखने वालों को उसका 6 अक्षरों का कोड दीजिए, और देखिए किसने अकाउंट खोला, कौन अटका है, और कौन-से धोखे अब भी उन्हें फँसाते हैं।',
       noserver:'इस पेज को पहला कदम सर्वर चाहिए। <code>server</code> फ़ोल्डर में <code>npm start</code> चलाकर यह पेज वहीं से खोलें, या पते में <code>?api=https://your-server</code> जोड़ें।',
       tlogin:'लॉग इन', treg:'अकाउंट बनाएँ', name:'आपका नाम', email:'ईमेल', pw:'पासवर्ड', go_login:'लॉग इन', go_reg:'अकाउंट बनाएँ', demo:'डेमो फ़ैसिलिटेटर से देखें',

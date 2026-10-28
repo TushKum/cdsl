@@ -23,6 +23,8 @@
     <h1 data-i="h1">What learners are actually learning</h1>
     <p class="lede" data-i="lede">Anonymous totals across every learner who backs up their practice account. No names, numbers or personal details are shown here.</p>
   </div>
+  <div class="note" id="waking" hidden data-i="waking">Waking up the server. On the free plan the first visit can take up to a minute…</div>
+  <div class="note" id="eph" hidden data-i="eph">Free demo server: these figures restart from the demo group whenever the server restarts or sleeps.</div>
   <div class="note" id="noserver" hidden data-i="noserver">This page needs the Pehla Kadam server. Run it with <code>npm start</code> in the <code>server</code> folder and open this page from it, or add <code>?api=https://your-server</code> to the address.</div>
   <div id="out" style="display:flex;flex-direction:column;gap:20px"></div>
   <footer data-i="foot">All money and prices in Pehla Kadam are simulated. Figures refresh every 30 seconds on the server.</footer>
@@ -34,7 +36,7 @@
   'use strict';
   var P = window.PK, data = null;
   P.i18n({
-    en: { brand:'Pehla Kadam', sub:'Insights', eye:'Live from the Pehla Kadam server', h1:'What learners are actually learning',
+    en: { waking:'Waking up the server. On the free plan the first visit can take up to a minute…', eph:'Free demo server: these figures restart from the demo group whenever the server restarts or sleeps.', brand:'Pehla Kadam', sub:'Insights', eye:'Live from the Pehla Kadam server', h1:'What learners are actually learning',
       lede:'Anonymous totals across every learner who backs up their practice account. No names, numbers or personal details are shown here.',
       noserver:document.getElementById('noserver').innerHTML, foot:'All money and prices in Pehla Kadam are simulated. Figures refresh every 30 seconds on the server.',
       demo:'Includes {n} demo learners created by the seed script.', k_n:'Learners backed up', k_day:'Average day reached', k_day_s:'of 60 simulated days',
@@ -43,7 +45,7 @@
       s_h:'Scam Shield results', s_b:'How often each message was judged correctly. The lowest bars show which tricks still work.',
       l_h:'Lessons read', l_b:'Share of learners who finished each lesson, least read first.',
       empty:'No learners have backed up yet. Open the app from this server and turn on backup in Profile.', right:'{a} of {b} right', updated:'Updated {t}' },
-    hi: { brand:'पहला कदम', sub:'इनसाइट्स', eye:'पहला कदम सर्वर से सीधे', h1:'सीखने वाले असल में क्या सीख रहे हैं',
+    hi: { waking:'सर्वर जगाया जा रहा है। मुफ़्त प्लान पर पहली बार में एक मिनट तक लग सकता है…', eph:'मुफ़्त डेमो सर्वर: सर्वर के दोबारा शुरू होने या सोने पर ये आँकड़े डेमो ग्रुप से फिर शुरू होते हैं।', brand:'पहला कदम', sub:'इनसाइट्स', eye:'पहला कदम सर्वर से सीधे', h1:'सीखने वाले असल में क्या सीख रहे हैं',
       lede:'अपना अभ्यास अकाउंट बैकअप करने वाले सभी लोगों के गुमनाम आँकड़े। यहाँ कोई नाम, नंबर या निजी जानकारी नहीं दिखती।',
       noserver:'इस पेज को पहला कदम सर्वर चाहिए। <code>server</code> फ़ोल्डर में <code>npm start</code> चलाकर यह पेज वहीं से खोलें, या पते में <code>?api=https://your-server</code> जोड़ें।',
       foot:'पहला कदम में सारा पैसा और सारे भाव सिम्युलेटेड हैं। सर्वर पर आँकड़े हर 30 सेकंड में ताज़ा होते हैं।',
@@ -79,9 +81,12 @@
     el.innerHTML = h;
   }
   function load(){
-    P.api('GET', '/api/stats').then(function(r){
-      if(r.status !== 200){ $('noserver').hidden = false; return; }
-      $('noserver').hidden = true; data = r.data; render();
+    P.health().then(function(ok){
+      if(!ok){ $('noserver').hidden = false; return; }
+      P.api('GET', '/api/stats').then(function(r){
+        if(r.status !== 200){ $('noserver').hidden = false; return; }
+        $('noserver').hidden = true; data = r.data; render();
+      });
     });
   }
   P.onLang(render);
